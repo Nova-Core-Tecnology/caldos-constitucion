@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menú | Caldos Constitución And Restaurant</title>
+<meta name="description" content="Menú de Caldos Constitución And Restaurant: caldos y sopas, mariscos, antojos, acompañantes, bebidas y postres. Añade platos a favoritos o al carrito.">
+<meta name="theme-color" content="#FFF8F0">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="Caldos Constitución And Restaurant">
+<meta property="og:title" content="Menú | Caldos Constitución And Restaurant">
+<meta property="og:description" content="Menú de Caldos Constitución And Restaurant: caldos y sopas, mariscos, antojos, acompañantes, bebidas y postres. Añade platos a favoritos o al carrito.">
+<meta property="og:image" content="../assets/logo/logo.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="../components/shared/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<link rel="stylesheet" href="../components/shared/botanical.css">
+<link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="menu.css">
+</head>
+<body data-page="menu">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div id="site-header"></div>
+<main id="main">
+
+<!-- Hero oscuro: titular grande, categorías como accesos directos y platos en movimiento inclinados -->
+<section class="mh" id="mh" data-jungle="hero">
+  <div class="wrap mh__in">
+    <div class="mh__copy">
+      <span class="mh__eyebrow">Nuestra carta · San Cristóbal</span>
+      <h1><span class="line"><span class="mh__big">Menú</span></span><span class="line"><em>de casa</em></span></h1>
+      <p class="lead">Caldos, mariscos, antojos, acompañantes, bebidas y postres. Elige, guarda tus favoritos y arma tu pedido.</p>
+
+      <div class="mh__cta">
+        <a class="btn mh__go" href="#bar" id="mh-go"><span>Ver toda la carta</span><span class="arr" data-ic="arrow" aria-hidden="true"></span></a>
+        <a class="mh__wa" id="mh-wa" href="#" target="_blank" rel="noopener noreferrer"><span data-ic="chat" aria-hidden="true"></span>Pedir por WhatsApp<span class="visually-hidden"> (se abre en una pestaña nueva)</span></a>
+      </div>
+
+      <nav class="mh__index" aria-labelledby="mh-idx">
+        <h2 class="mh__index-h" id="mh-idx">Ir directo a</h2>
+        <ol id="mh-cats"></ol>
+      </nav>
+
+      <p class="mh__meta" id="mh-meta" hidden></p>
+    </div>
+
+    <div class="mh__win">
+      <div class="mh__reel" id="mh-reel" role="group" aria-label="Algunos platos de la carta. Pulsa uno para ver su ficha."></div>
+    </div>
+  </div>
+  <div class="mh__tick" aria-hidden="true"><div class="mh__tick-t" id="mh-tick"></div></div>
+</section>
+
+<!-- Barra de filtros: búsqueda, categorías y orden (se puede ocultar) -->
+<div class="bar" id="bar">
+  <div class="wrap bar__in">
+    <div class="bar__row">
+      <div class="search">
+        <label class="visually-hidden" for="q">Buscar en el menú</label>
+        <input id="q" type="search" placeholder="Buscar plato, por ejemplo: mofongo" autocomplete="off">
+        <button class="search__x" type="button" id="clear" aria-label="Borrar búsqueda" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="sort">
+        <label for="sort">Ordenar</label>
+        <select id="sort">
+          <option value="menu">Orden de la carta</option>
+          <option value="asc">Precio: menor a mayor</option>
+          <option value="desc">Precio: mayor a menor</option>
+          <option value="az">Nombre: A a Z</option>
+        </select>
+      </div>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filtrar por categoría"></div>
+    <button class="bar__toggle" type="button" id="bar-toggle" aria-expanded="true"><span id="bar-toggle-t">Ocultar filtros</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 15l6-6 6 6"/></svg></button>
+  </div>
+</div>
+
+<section class="section menu" data-jungle="light-long">
+  <div class="wrap">
+    <p class="count" id="count" role="status" aria-live="polite"></p>
+    <div id="grid" class="menu__list"></div>
+    <div class="empty" id="none" hidden>
+      <div class="empty__icon" id="none-ic"></div>
+      <h2 style="font-size:1.5rem">No encontramos platos</h2>
+      <p id="none-msg">Prueba con otra palabra o elige otra categoría.</p>
+      <button class="btn btn--outline" type="button" id="reset">Ver todo el menú</button>
+    </div>
+    <div class="notice" style="margin-top:2.5rem"><strong>Precios y disponibilidad</strong>Los precios están en pesos dominicanos (RD$) y pueden cambiar. Confirma precios y disponibilidad con el restaurante al hacer tu pedido.</div>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/jungle.js"></script>
+<script src="../components/header/header.js"></script>
+<script src="../components/footer/footer.js"></script>
+<script src="../components/shared/botanical-art.js"></script>
+<script src="menu.js"></script>
+<script src="../components/shared/boot.js"></script>
+</body>
+</html>

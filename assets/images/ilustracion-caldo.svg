@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Ilustración de un plato hondo de caldo humeante">
+<defs>
+<linearGradient id="bw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF8F0"/><stop offset="1" stop-color="#E9CBA4"/></linearGradient>
+<linearGradient id="br" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F29A4B"/><stop offset="1" stop-color="#D4572A"/></linearGradient>
+<radialGradient id="gl" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#FFE3BE" stop-opacity=".55"/><stop offset="1" stop-color="#FFE3BE" stop-opacity="0"/></radialGradient>
+</defs>
+<circle cx="200" cy="215" r="185" fill="url(#gl)"/>
+<ellipse cx="200" cy="338" rx="135" ry="17" fill="#2E170E" opacity=".28"/>
+<path d="M58 196h284c0 92-52 142-142 142S58 288 58 196z" fill="url(#bw)"/>
+<path d="M72 250c40 20 216 20 256 0" fill="none" stroke="#CC4125" stroke-width="9" stroke-linecap="round"/>
+<path d="M92 282c36 14 180 14 216 0" fill="none" stroke="#EBBE8B" stroke-width="5" stroke-linecap="round"/>
+<ellipse cx="200" cy="196" rx="142" ry="38" fill="#FFF8F0"/>
+<ellipse cx="200" cy="199" rx="124" ry="29" fill="url(#br)"/>
+<ellipse cx="160" cy="194" rx="24" ry="9" fill="#F6C46E"/><ellipse cx="230" cy="204" rx="21" ry="8" fill="#F0B35A"/>
+<circle cx="262" cy="192" r="9" fill="#F7D58A"/><circle cx="132" cy="206" r="8" fill="#F7D58A"/>
+<g fill="#6E9A4B"><ellipse cx="200" cy="190" rx="17" ry="6" transform="rotate(-24 200 190)"/><ellipse cx="184" cy="205" rx="14" ry="5" transform="rotate(18 184 205)"/><ellipse cx="246" cy="198" rx="13" ry="5" transform="rotate(-8 246 198)"/><ellipse cx="146" cy="196" rx="12" ry="4.5" transform="rotate(30 146 196)"/></g>
+<g fill="none" stroke="#FFF8F0" stroke-width="9" stroke-linecap="round" opacity=".7">
+<path d="M150 150c-20-24 18-34-2-62"/><path d="M200 140c-22-28 20-40-2-76"/><path d="M252 150c-20-24 18-34-2-62"/></g>
+</svg>

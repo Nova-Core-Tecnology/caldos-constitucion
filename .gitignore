@@ -1,0 +1,10 @@
+# Archivos del sistema y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+.vscode/
+.idea/
+# Cachés
+__pycache__/
+*.pyc

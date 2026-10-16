@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Ilustración de un plato con mofongo, tostones y chicharrón">
+<defs>
+<radialGradient id="gl" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#FFE3BE" stop-opacity=".5"/><stop offset="1" stop-color="#FFE3BE" stop-opacity="0"/></radialGradient>
+<radialGradient id="mo" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#F3CF86"/><stop offset="1" stop-color="#C98B3E"/></radialGradient>
+<linearGradient id="pl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF8F0"/><stop offset="1" stop-color="#E9CBA4"/></linearGradient>
+</defs>
+<circle cx="200" cy="210" r="185" fill="url(#gl)"/>
+<ellipse cx="200" cy="318" rx="165" ry="24" fill="#2E170E" opacity=".3"/>
+<ellipse cx="200" cy="270" rx="170" ry="62" fill="url(#pl)"/>
+<ellipse cx="200" cy="268" rx="138" ry="46" fill="#FFF8F0" stroke="#EBBE8B" stroke-width="4"/>
+<path d="M110 262c0-70 40-112 90-112s90 42 90 112c0 20-36 34-90 34s-90-14-90-34z" fill="url(#mo)"/>
+<g fill="#A86A2A" opacity=".55"><circle cx="170" cy="215" r="6"/><circle cx="214" cy="196" r="5"/><circle cx="238" cy="232" r="7"/><circle cx="188" cy="248" r="5"/><circle cx="150" cy="248" r="4"/></g>
+<g fill="#CC4125"><path d="M196 138l16 4-6 16-14-6z"/><path d="M170 160l14 2-2 14-13-5z"/></g>
+<g fill="#6E9A4B"><ellipse cx="228" cy="170" rx="13" ry="5" transform="rotate(-30 228 170)"/><ellipse cx="208" cy="150" rx="10" ry="4" transform="rotate(20 208 150)"/></g>
+<g><ellipse cx="96" cy="276" rx="30" ry="12" fill="#EBBE8B"/><ellipse cx="96" cy="272" rx="30" ry="12" fill="#F6D9A0"/><ellipse cx="318" cy="278" rx="28" ry="11" fill="#EBBE8B"/><ellipse cx="318" cy="274" rx="28" ry="11" fill="#F6D9A0"/></g>
+<g fill="none" stroke="#FFF8F0" stroke-width="8" stroke-linecap="round" opacity=".7"><path d="M170 118c-16-20 14-28-2-50"/><path d="M226 112c-16-20 14-28-2-52"/></g>
+</svg>

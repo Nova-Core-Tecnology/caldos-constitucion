@@ -1,0 +1,81 @@
+/* Caldos Constitución — decoración de hierbas
+   Todas las clases empiezan por "botanical-". Solo adorno: pointer-events none y siempre detrás del contenido. */
+
+.botanical-host { isolation: isolate; --bt-m: calc((100vw - 1180px) / 2); }
+.botanical-host--rel { position: relative; }
+
+/* La capa va con z-index negativo dentro del contexto de apilamiento de su sección:
+   queda sobre el fondo de la sección y bajo todo su contenido */
+.botanical-layer { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: layout paint; }
+.botanical-deco { position: absolute; bottom: 0; line-height: 0; pointer-events: none; }
+.botanical-deco svg { display: block; width: 100%; height: auto; overflow: visible; }
+.botanical-flip-x { transform: scaleX(-1); }
+.botanical-flip-y { transform: scaleY(-1); }
+
+/* ---- Hojas: cada <use> toma su verde de la clase g1..g6 (de oscuro a claro), gy, gb, fl ---- */
+.botanical-art .g1 { --lf: var(--bt-g1); } .botanical-art .g2 { --lf: var(--bt-g2); } .botanical-art .g3 { --lf: var(--bt-g3); }
+.botanical-art .g4 { --lf: var(--bt-g4); } .botanical-art .g5 { --lf: var(--bt-g5); } .botanical-art .g6 { --lf: var(--bt-g6); }
+.botanical-art .gy { --lf: var(--bt-gy); } .botanical-art .gb { --lf: var(--bt-gb); }
+.botanical-art .fl { --lf: var(--bt-fl); } .botanical-art .fl2 { --lf: var(--bt-fl2); }
+.botanical-art .bs { fill: none; stroke: var(--bt-st); stroke-linecap: round; }
+.botanical-art .bw { stroke: var(--bt-gy); }
+
+/* ---- Paletas: sobre crema, verdes profundos; sobre marrón/rojo, verdes más vivos ---- */
+.botanical-layer[data-theme="light"] {
+  --bt-g1: #2f4a2b; --bt-g2: #3f5e33; --bt-g3: #54733a; --bt-g4: #6e8a47; --bt-g5: #8fa65b; --bt-g6: #b2c27e;
+  --bt-gy: #7d8a62; --bt-gb: #3d5a4a; --bt-fl: #b78fb8; --bt-fl2: #efe3b8; --bt-st: #4a5a30;
+}
+.botanical-layer[data-theme="dark"] {
+  --bt-g1: #36502d; --bt-g2: #48663a; --bt-g3: #5e7e42; --bt-g4: #78984d; --bt-g5: #96b362; --bt-g6: #b9cf86;
+  --bt-gy: #92a075; --bt-gb: #587b66; --bt-fl: #c9a2c9; --bt-fl2: #f3e8bd; --bt-st: #5f7a46;
+}
+
+/* ---- Posiciones: las hierbas crecen desde el borde inferior de cada bloque ---- */
+.botanical-deco--hedge { left: 0; width: 100%; min-width: 720px; }
+.botanical-layer--hero .botanical-deco--hedge { opacity: .8; }
+.botanical-deco--hero-l { left: 0; width: clamp(0px, calc(var(--bt-m) + 6px), 190px); opacity: .8; }
+.botanical-deco--hero-r { right: 0; width: clamp(360px, 40vw, 720px); opacity: 1; }
+
+.botanical-deco--c-l { left: 0; width: clamp(0px, calc(var(--bt-m) + 14px), 300px); opacity: .92; }
+.botanical-deco--c-r { right: 0; width: clamp(0px, calc(var(--bt-m) + 14px), 300px); opacity: .92; }
+.botanical-deco--wel-l { left: 0; width: clamp(0px, calc(var(--bt-m) + 4px), 150px); opacity: .85; }
+.botanical-layer--visit .botanical-deco { opacity: .85; }
+
+@media (max-width: 960px) { .botanical-layer--hero .botanical-deco--hero-r { display: none; } }
+
+/* Menú: matas pequeñas sobre el borde inferior de la barra, en los extremos */
+.botanical-deco--nav-l { left: 0; width: clamp(130px, 14vw, 210px); opacity: .85; }
+.botanical-deco--nav-r { right: 0; width: clamp(130px, 14vw, 210px); opacity: .85; }
+.botanical-layer--nav { display: none; }
+@media (min-width: 1200px) { .botanical-layer--nav { display: block; } }
+
+/* Pie: las matas asoman por encima de su borde superior; el seto queda detrás del texto, muy suave */
+.botanical-layer--footer { overflow-x: clip; overflow-y: visible; contain: none; }
+.botanical-layer--footer .botanical-deco--hedge { opacity: .4; }
+.botanical-deco--ft-up-l { left: 0; bottom: 100%; margin-bottom: -4px; width: clamp(180px, 20vw, 320px); }
+.botanical-deco--ft-up-r { right: 0; bottom: 100%; margin-bottom: -4px; width: clamp(200px, 22vw, 360px); }
+
+/* ---- Animación: cada mata brota desde su base y algunas se mecen apenas ---- */
+.botanical-layer .bp { opacity: 0; transform: scale(.86); transition: opacity 1.2s ease var(--d, 0s), transform 1.8s cubic-bezier(.2, .8, .2, 1) var(--d, 0s); }
+.botanical-layer.is-in .bp { opacity: 1; transform: none; }
+.botanical-layer.is-in .bp.sw { animation: botanical-sway var(--s, 9s) ease-in-out calc(var(--d, 0s) + 2.5s) infinite alternate; }
+.botanical-layer.is-off .bp.sw { animation-play-state: paused; }
+@keyframes botanical-sway { from { transform: rotate(-.9deg); } to { transform: rotate(.9deg); } }
+
+/* ---- Tablet ---- */
+/* Las matas laterales solo viven en el margen libre a los lados del contenido (pantallas anchas) */
+@media (max-width: 1239px) { .botanical-secondary { display: none; } }
+
+/* ---- Móvil: solo setos bajos y una mata pequeña; nunca sobre textos ni controles ---- */
+@media (max-width: 520px) {
+  .botanical-deco--hedge { min-width: 560px; }
+  .botanical-deco--ft-up-l { width: 150px; }
+  .botanical-deco--ft-up-r { width: 160px; }
+}
+
+/* ---- Movimiento reducido: todo visible y quieto ---- */
+@media (prefers-reduced-motion: reduce) {
+  .botanical-layer .bp { opacity: 1; transform: none; transition: none; animation: none !important; }
+}
+
+@media print { .botanical-layer { display: none; } }

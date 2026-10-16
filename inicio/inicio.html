@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caldos Constitución And Restaurant | Inicio — San Cristóbal</title>
+<meta name="description" content="Caldos, sancocho, mofongo y mariscos dominicanos en San Cristóbal. Mira el menú y reserva tu mesa en Caldos Constitución And Restaurant.">
+<meta name="theme-color" content="#FFF8F0">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="Caldos Constitución And Restaurant">
+<meta property="og:title" content="Caldos Constitución And Restaurant | Inicio — San Cristóbal">
+<meta property="og:description" content="Caldos, sancocho, mofongo y mariscos dominicanos en San Cristóbal. Mira el menú y reserva tu mesa en Caldos Constitución And Restaurant.">
+<meta property="og:image" content="../assets/logo/logo.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="../components/shared/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="inicio.css">
+<link rel="stylesheet" href="../components/shared/botanical.css">
+<link rel="stylesheet" href="inicio-plus.css">
+</head>
+<body data-page="inicio">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div id="site-header"></div>
+<main id="main">
+<section class="hero" id="hero" aria-labelledby="hero-title" data-jungle="hero" data-jungle-fall="0">
+  <div class="hero__bg" aria-hidden="true">
+    <video class="hero__video" id="hero-video" muted loop playsinline autoplay preload="metadata"><source src="../assets/video/hero.mp4" type="video/mp4"></video>
+  </div>
+  <div class="hero__tint" aria-hidden="true"></div>
+
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <h1 id="hero-title"><span class="line"><span>Caldo hirviendo,</span></span><span class="line"><span>mesa llena.</span></span></h1>
+      <p class="lead">Sancocho de siete carnes, caldo de pata, mofongo y mariscos. Calientes, abundantes y para compartir.</p>
+      <div class="hero__cta">
+        <a class="btn hero__go" href="../menu/menu.html">Ver el menú<span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+        <a class="btn btn--ghost hero__alt" href="../reservas/reservas.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 3v3M16 3v3"/></svg>Reservar mesa</a>
+      </div>
+      <nav class="hero__quick" aria-label="Categorías del menú"><span>Ir directo a</span><a href="../menu/menu.html?cat=caldos">Caldos y sopas</a><a href="../menu/menu.html?cat=mariscos">Mariscos</a><a href="../menu/menu.html?cat=antojos">Antojos</a></nav>
+    </div>
+    <div class="stage" id="stage" role="region" aria-roledescription="carrusel" aria-label="Platos de la casa"></div>
+  </div>
+
+  <div class="wrap"><div class="hinfo" id="strip"></div></div>
+  <button class="hero__ctl" id="hero-ctl" type="button" aria-pressed="false" aria-label="Pausar video de fondo" hidden></button>
+</section>
+
+<section class="section feat" aria-labelledby="dest-title" data-jungle="light-a"><div class="wrap">
+  <div class="feat__head reveal">
+    <div>
+      <span class="eyebrow">Platos destacados</span>
+      <h2 id="dest-title">Para empezar por lo mejor de la casa</h2>
+      <p class="lead">Los platos que más se piden en la mesa. Elige una categoría o añade directo a tu pedido.</p>
+    </div>
+    <div class="feat__filters" id="feat-filters" role="group" aria-label="Filtrar platos destacados"></div>
+  </div>
+  <div class="feat__layout" id="featured"></div>
+  <p class="visually-hidden" id="feat-status" role="status"></p>
+  <div class="feat__foot">
+    <p id="feat-count"></p>
+    <a class="btn btn--outline" href="../menu/menu.html">Ver menú completo</a>
+  </div>
+</div></section>
+
+<section class="section kitchen" aria-labelledby="cat-title" data-jungle="dark-a"><div class="wrap">
+  <div class="kitchen__head reveal">
+    <div><span class="eyebrow">Nuestra cocina</span><h2 id="cat-title">¿Qué se te antoja hoy?</h2></div>
+    <p class="lead">Tres formas de sentarte a la mesa. Elige una y mira lo que sale de la cocina, con sus precios.</p>
+  </div>
+  <div class="kitchen__grid" id="tiles"></div>
+</div></section>
+
+<section class="section wel" aria-labelledby="intro-title" data-jungle="light-c"><div class="wrap wel__in">
+  <div class="wel__copy reveal">
+    <span class="eyebrow">Bienvenido</span>
+    <h2 id="intro-title">Un restaurante pensado para compartir la mesa</h2>
+    <p class="lead">Caldos Constitución And Restaurant te recibe en San Cristóbal con una carta de caldos, antojos, mariscos, acompañantes, bebidas y postres.</p>
+    <ul class="wel__points" id="wel-points"></ul>
+    <div class="wel__stats" id="wel-stats"></div>
+    <div class="wel__cta"><a class="btn" href="../nosotros/nosotros.html">Conócenos</a><a class="btn btn--outline" href="../menu/menu.html">Ver el menú</a></div>
+  </div>
+  <div class="wel__art reveal" id="collage" role="group" aria-label="Algunos de nuestros platos"></div>
+</div></section>
+
+<section class="visit" aria-labelledby="cta-title" data-jungle="shade">
+  <svg class="visit__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 11h18v1a8 8 0 0 1-8 8h-2a8 8 0 0 1-8-8v-1z"/><path d="M8 3.5c-1.2 1.4 1.2 2.2 0 3.8M12 3.5c-1.2 1.4 1.2 2.2 0 3.8M16 3.5c-1.2 1.4 1.2 2.2 0 3.8"/></svg>
+  <div class="wrap visit__in">
+    <div class="visit__copy reveal">
+      <span class="visit__eyebrow">Visítanos</span>
+      <h2 id="cta-title">Te esperamos en San Cristóbal</h2>
+      <p>Ven con hambre y con quien quieras compartir la mesa. Reserva tu lugar o consulta cómo llegar.</p>
+      <div class="visit__btns">
+        <a class="btn btn--gold visit__btn" href="../reservas/reservas.html"><span data-ic="calendar"></span>Reservar mesa</a>
+        <a class="btn btn--ghost visit__btn" href="../contacto/contacto.html"><span data-ic="pin"></span>Cómo llegar</a>
+      </div>
+    </div>
+    <div class="visit__card reveal" id="visit-info"></div>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/jungle.js"></script>
+<script src="../components/header/header.js"></script>
+<script src="../components/footer/footer.js"></script>
+<script src="inicio.js"></script>
+<script src="../components/shared/boot.js"></script>
+<script src="../components/shared/botanical-art.js"></script>
+<script src="../components/shared/botanical.js"></script>
+<script src="inicio-plus.js"></script>
+</body>
+</html>

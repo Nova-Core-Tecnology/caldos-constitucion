@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contacto | Caldos Constitución And Restaurant</title>
+<meta name="description" content="Contacta a Caldos Constitución And Restaurant en San Cristóbal: dirección, mapa, WhatsApp y redes sociales.">
+<meta name="theme-color" content="#FFF8F0">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="Caldos Constitución And Restaurant">
+<meta property="og:title" content="Contacto | Caldos Constitución And Restaurant">
+<meta property="og:description" content="Contacta a Caldos Constitución And Restaurant en San Cristóbal: dirección, mapa, WhatsApp y redes sociales.">
+<meta property="og:image" content="../assets/logo/logo.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="../components/shared/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<link rel="stylesheet" href="../components/shared/botanical.css">
+<link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="contacto.css">
+</head>
+<body data-page="contacto">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div id="site-header"></div>
+<main id="main">
+
+<!-- Hero oscuro con tarjeta de visita -->
+<section class="ch" id="ch" data-jungle="hero">
+  <div class="wrap ch__in">
+    <div class="ch__copy">
+      <span class="ch__eyebrow">Contacto · San Cristóbal</span>
+      <h1><span class="line"><span>Hablemos</span></span><span class="line"><em>cuando quieras</em></span></h1>
+      <p class="lead">Escríbenos por WhatsApp, haz tu pedido o ven a visitarnos. Aquí tienes todo para encontrarnos.</p>
+      <div class="ch__cta">
+        <a class="btn ch__wa" id="ch-wa" href="#" target="_blank" rel="noopener noreferrer"><span data-ic="chat" aria-hidden="true"></span>Escribir por WhatsApp<span class="visually-hidden"> (se abre en una pestaña nueva)</span></a>
+        <a class="ch__link" href="#mapa">Cómo llegar<span data-ic="arrow" aria-hidden="true"></span></a>
+      </div>
+    </div>
+    <div class="ch__visual" aria-hidden="true">
+      <div class="vcard">
+        <img src="../assets/logo/logo.png" alt="" onerror="this.style.display='none'">
+        <p class="vcard__name" id="vc-name"></p>
+        <p class="vcard__tag" id="vc-tag"></p>
+        <ul class="vcard__list">
+          <li><span data-ic="pin"></span><span id="vc-addr"></span></li>
+          <li><span data-ic="chat"></span><span id="vc-wa"></span></li>
+        </ul>
+        <span class="vcard__stamp">San Cristóbal<br>RD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Datos de contacto en tarjetas -->
+<section class="cc-wrap"><div class="wrap">
+  <div class="cc-grid" id="info"></div>
+</div></section>
+
+<!-- Formulario y mapa -->
+<section class="section cx-sec" id="mapa" data-jungle="light-b"><div class="wrap cx">
+  <form class="cf reveal" id="form" novalidate aria-labelledby="f-title">
+    <header class="cf__head">
+      <span class="cf__ic" data-ic="chat" aria-hidden="true"></span>
+      <div><h2 id="f-title">Envíanos un mensaje</h2><p>Cuéntanos qué necesitas y lo preparamos en WhatsApp.</p></div>
+    </header>
+
+    <fieldset class="cf__topics">
+      <legend>¿Sobre qué quieres escribirnos? <span class="opt">(opcional)</span></legend>
+      <label><input type="radio" name="motive" value="Hacer un pedido"><span>Hacer un pedido</span></label>
+      <label><input type="radio" name="motive" value="Reservación"><span>Reservación</span></label>
+      <label><input type="radio" name="motive" value="Pregunta sobre el menú"><span>Pregunta sobre el menú</span></label>
+      <label><input type="radio" name="motive" value="Otro tema"><span>Otro tema</span></label>
+    </fieldset>
+
+    <div class="form-grid">
+      <div class="field"><label for="name">Nombre</label><input id="name" name="name" autocomplete="name" required><span class="error-msg" id="name-e"></span></div>
+      <div class="field"><label for="phone">Teléfono <span class="opt">(opcional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"><span class="error-msg" id="phone-e"></span></div>
+      <div class="field field--full"><label for="msg">Mensaje</label><textarea id="msg" name="msg" required minlength="10" maxlength="600"></textarea><span class="cf__count" id="msg-n" aria-hidden="true">0 / 600</span><span class="error-msg" id="msg-e"></span></div>
+    </div>
+
+    <div class="cf__how"><span data-ic="shield" aria-hidden="true"></span><p><strong>¿Cómo se envía?</strong>Este sitio no tiene un servidor de correo. Al continuar abrimos WhatsApp con tu mensaje ya escrito; solo se envía cuando tú pulsas enviar allí.</p></div>
+    <button class="btn cf__send" type="submit" id="send"><span data-ic="chat" aria-hidden="true"></span>Continuar en WhatsApp</button>
+    <div id="result" role="status" aria-live="polite" style="margin-top:1rem"></div>
+  </form>
+
+  <aside class="cm reveal" aria-labelledby="m-title">
+    <div class="cm__map"><iframe id="map" title="Mapa de la ubicación de Caldos Constitución And Restaurant" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+    <div class="cm__body">
+      <span class="cm__ic" data-ic="pin" aria-hidden="true"></span>
+      <div class="cm__tx"><h2 id="m-title">Cómo llegar</h2><p id="addr"></p></div>
+      <div class="cm__act">
+        <a class="btn btn--sm" id="gmaps" target="_blank" rel="noopener noreferrer"><span data-ic="pin" aria-hidden="true"></span>Abrir en Google Maps<span class="visually-hidden"> (se abre en una pestaña nueva)</span></a>
+        <button class="btn btn--sm btn--outline" type="button" id="copy">Copiar dirección</button>
+      </div>
+    </div>
+  </aside>
+</div></section>
+
+<!-- Cierre -->
+<section class="section cb-sec" data-jungle="light-c" data-hedge="light"><div class="wrap">
+  <div class="cb reveal">
+    <div><h2>¿Prefieres ver la carta primero?</h2><p>Mira los platos, guarda tus favoritos y arma tu pedido antes de escribirnos.</p></div>
+    <div class="cb__act"><a class="btn btn--gold" href="../menu/menu.html">Ver el menú</a></div>
+  </div>
+</div></section>
+</main>
+<div id="site-footer"></div>
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/jungle.js"></script>
+<script src="../components/header/header.js"></script>
+<script src="../components/footer/footer.js"></script>
+<script src="../components/shared/botanical-art.js"></script>
+<script src="contacto.js"></script>
+<script src="../components/shared/boot.js"></script>
+</body>
+</html>

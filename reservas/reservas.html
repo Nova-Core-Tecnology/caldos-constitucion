@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reservar mesa | Caldos Constitución And Restaurant</title>
+<meta name="description" content="Solicita tu reserva en Caldos Constitución And Restaurant. Indica fecha, hora y número de personas; el restaurante la confirmará por WhatsApp.">
+<meta name="theme-color" content="#FFF8F0">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="Caldos Constitución And Restaurant">
+<meta property="og:title" content="Reservar mesa | Caldos Constitución And Restaurant">
+<meta property="og:description" content="Solicita tu reserva en Caldos Constitución And Restaurant. Indica fecha, hora y número de personas; el restaurante la confirmará por WhatsApp.">
+<meta property="og:image" content="../assets/logo/logo.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="../components/shared/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<link rel="stylesheet" href="../components/shared/botanical.css">
+<link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="reservas.css">
+</head>
+<body data-page="reservas">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div id="site-header"></div>
+<main id="main">
+<section class="page-hero" data-jungle="page"><div class="wrap"><span class="eyebrow" style="color:var(--gold)">Reservas</span><h1>Reserva tu mesa</h1>
+<p class="lead">Completa la solicitud y envíala por WhatsApp. La reserva queda confirmada cuando el restaurante te responda.</p></div></section>
+
+<section class="section" data-jungle="light-a" data-hedge="light"><div class="wrap narrow">
+  <form class="card-form" id="rform" novalidate aria-labelledby="rt">
+    <h2 id="rt" class="visually-hidden">Formulario de solicitud de reserva</h2>
+    <div class="form-grid">
+      <div class="field"><label for="r-name">Nombre del cliente</label><input id="r-name" autocomplete="name" required><span class="error-msg" id="r-name-e"></span></div>
+      <div class="field"><label for="r-via">Medio de contacto</label><select id="r-via"><option value="WhatsApp">WhatsApp</option><option value="Teléfono">Llamada telefónica</option><option value="Correo">Correo electrónico</option></select></div>
+      <div class="field field--full"><label for="r-contact" id="r-contact-l">Número de WhatsApp</label><input id="r-contact" required autocomplete="tel" inputmode="tel"><span class="error-msg" id="r-contact-e"></span></div>
+      <div class="field"><label for="r-date">Fecha</label><input id="r-date" type="date" required><span class="error-msg" id="r-date-e"></span></div>
+      <div class="field"><label for="r-time">Hora</label><input id="r-time" type="time" required><span class="error-msg" id="r-time-e"></span></div>
+      <div class="field"><label for="r-people">Número de personas</label><input id="r-people" type="number" min="1" max="30" value="2" inputmode="numeric" required><span class="error-msg" id="r-people-e"></span></div>
+      <div class="field field--full"><label for="r-notes">Solicitudes especiales <span class="opt">(opcional)</span></label><textarea id="r-notes" maxlength="400"></textarea></div>
+    </div>
+    <div class="notice" style="margin:1.2rem 0"><strong>Importante</strong>Esta página no verifica disponibilidad. Preparamos tu solicitud y la envías por WhatsApp; la reserva solo es válida cuando el restaurante la acepte.</div>
+    <button class="btn" type="submit" id="r-send"><span class="spin" hidden></span><span id="r-send-t">Preparar solicitud</span></button>
+  </form>
+  <div id="r-result" role="status" aria-live="polite" style="margin-top:1.4rem"></div>
+</div></section>
+</main>
+<div id="site-footer"></div>
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/jungle.js"></script>
+<script src="../components/header/header.js"></script>
+<script src="../components/footer/footer.js"></script>
+<script src="../components/shared/botanical-art.js"></script>
+<script src="reservas.js"></script>
+<script src="../components/shared/boot.js"></script>
+</body>
+</html>

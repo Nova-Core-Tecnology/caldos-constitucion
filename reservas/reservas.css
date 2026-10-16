@@ -1,0 +1,9 @@
+.narrow { max-width: 760px; }
+.card-form { background: #fff; padding: clamp(1.4rem, 3vw, 2.2rem); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+.spin { width: 18px; height: 18px; border: 3px solid rgba(255, 255, 255, .45); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+.spin[hidden] { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.summary { margin: .8rem 0 1.1rem; display: grid; grid-template-columns: auto 1fr; gap: .35rem 1rem; }
+.summary dt { font-weight: 800; color: var(--brown); }
+.summary dd { margin: 0; }
+.r-actions { display: flex; gap: .7rem; flex-wrap: wrap; }

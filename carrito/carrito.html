@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carrito | Caldos Constitución And Restaurant</title>
+<meta name="description" content="Revisa los platos de tu carrito en Caldos Constitución And Restaurant, dinos cómo lo quieres y envía tu pedido por WhatsApp.">
+<meta name="theme-color" content="#FFF8F0">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="Caldos Constitución And Restaurant">
+<meta property="og:title" content="Carrito | Caldos Constitución And Restaurant">
+<meta property="og:description" content="Revisa los platos de tu carrito en Caldos Constitución And Restaurant, dinos cómo lo quieres y envía tu pedido por WhatsApp.">
+<meta property="og:image" content="../assets/logo/logo.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="../components/shared/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<link rel="stylesheet" href="../components/shared/botanical.css">
+<link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="carrito.css">
+</head>
+<body data-page="carrito">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div id="site-header"></div>
+<main id="main">
+
+<!-- Hero: tu mesa y el recorrido del pedido -->
+<section class="kh" data-jungle="page">
+  <div class="wrap kh__in">
+    <div class="kh__tx">
+      <span class="kh__k">Tu pedido</span>
+      <h1>Tu mesa, <em>lista para pedir</em></h1>
+      <p class="lead">Ajusta cantidades, dinos cómo lo quieres y envíalo por WhatsApp. El restaurante lo confirma contigo.</p>
+      <p class="kh__sum" id="kh-sum" hidden></p>
+    </div>
+    <ol class="flow" id="flow" aria-label="Pasos del pedido">
+      <li class="flow__i" data-step="1"><span class="flow__n"><span data-ic="utensils"></span></span><span class="flow__t"><b>Elige tus platos</b><small>Desde el menú o tus favoritos</small></span></li>
+      <li class="flow__i" data-step="2"><span class="flow__n"><span data-ic="check"></span></span><span class="flow__t"><b>Revisa y personaliza</b><small>Cantidades, modalidad y nota</small></span></li>
+      <li class="flow__i" data-step="3"><span class="flow__n"><span data-ic="chat"></span></span><span class="flow__t"><b>Envía por WhatsApp</b><small>Con el mensaje ya escrito</small></span></li>
+      <li class="flow__i" data-step="4"><span class="flow__n"><span data-ic="shield"></span></span><span class="flow__t"><b>El restaurante confirma</b><small>Disponibilidad y precio final</small></span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section kart-sec" data-jungle="light-b" data-hedge="light">
+  <div class="wrap">
+
+    <div class="cart" id="cart" hidden>
+      <div class="cart__main">
+        <div class="cart__head">
+          <h2 id="list-t">Tus platos <span class="cart__badge" id="h-count">0</span></h2>
+          <a class="cart__more" href="../menu/menu.html"><span data-ic="left" aria-hidden="true"></span>Seguir añadiendo platos</a>
+        </div>
+        <ul class="cart__list" id="clist" aria-labelledby="list-t"></ul>
+
+        <!-- Personaliza: modalidad, nombre, hora, dirección y nota -->
+        <section class="opts" aria-labelledby="opts-t">
+          <svg class="opts__leaf" aria-hidden="true" focusable="false"><use href="#v-monstera"/></svg>
+          <h2 class="opts__t" id="opts-t">¿Cómo lo quieres?</h2>
+          <p class="opts__sub">Todo es opcional. Lo añadimos al mensaje para que el restaurante prepare tu pedido sin preguntar dos veces.</p>
+          <fieldset class="seg">
+            <legend class="visually-hidden">Modalidad del pedido</legend>
+            <label class="seg__o"><input type="radio" name="mode" value="recoger" checked><span class="seg__c"><span class="seg__ic" data-ic="pin"></span><b>Para recoger</b><small>Pasas a buscarlo</small></span></label>
+            <label class="seg__o"><input type="radio" name="mode" value="domicilio"><span class="seg__c"><span class="seg__ic" data-ic="home"></span><b>A domicilio</b><small>Pregunta si llega a tu zona</small></span></label>
+            <label class="seg__o"><input type="radio" name="mode" value="mesa"><span class="seg__c"><span class="seg__ic" data-ic="utensils"></span><b>Comer aquí</b><small>Para cuando llegues</small></span></label>
+          </fieldset>
+          <div class="form-grid opts__grid">
+            <div class="field"><label for="o-name">Nombre <span class="opt">(opcional)</span></label><input id="o-name" autocomplete="name" maxlength="60" placeholder="¿A nombre de quién?"></div>
+            <div class="field"><label for="o-time">Hora aproximada <span class="opt">(opcional)</span></label><input id="o-time" type="time"></div>
+            <div class="field field--full" id="addr-f" hidden><label for="o-addr">Dirección de entrega</label><input id="o-addr" autocomplete="street-address" maxlength="160" placeholder="Calle, número, sector y una referencia"></div>
+            <div class="field field--full"><label for="note">Nota para la cocina <span class="opt">(opcional)</span></label><textarea id="note" rows="2" maxlength="200" placeholder="Ej.: sin picante, cubiertos, salsa aparte…"></textarea><small class="opts__count" id="note-c">0/200</small></div>
+          </div>
+          <p class="opts__save"><span data-ic="shield" aria-hidden="true"></span>Se guarda solo en este dispositivo.</p>
+        </section>
+
+        <!-- Sugerencias que combinan -->
+        <section class="more" id="more" aria-labelledby="more-t" hidden>
+          <div class="more__head">
+            <div><h2 id="more-t">Completa tu mesa</h2><p>Bebidas, acompañantes y postres que van bien con lo que llevas.</p></div>
+            <div class="more__nav"><button type="button" id="more-prev" aria-label="Ver sugerencias anteriores"><span data-ic="left"></span></button><button type="button" id="more-next" aria-label="Ver más sugerencias"><span data-ic="right"></span></button></div>
+          </div>
+          <ul class="more__row" id="more-row"></ul>
+        </section>
+      </div>
+
+      <!-- Comanda -->
+      <aside class="cart__sum" id="sum" aria-labelledby="sum-t">
+        <div class="receipt">
+          <span class="receipt__sprig tone-light jg-grow" aria-hidden="true">
+            <svg class="jp jp--fern rs-1"><use href="#v-fern"/></svg>
+            <svg class="jp jp--palm rs-2"><use href="#v-palm"/></svg>
+            <svg class="rs-3"><use href="#v-flower"/></svg>
+          </span>
+          <div class="receipt__paper">
+            <div class="receipt__head">
+              <img src="../assets/logo/logo-sm.png" width="64" height="59" alt="" onerror="this.style.display='none'">
+              <div><h2 id="sum-t">Comanda</h2><p id="r-meta">Para recoger · lo antes posible</p></div>
+            </div>
+            <ul class="receipt__lines" id="r-lines"></ul>
+            <dl class="receipt__tot">
+              <div><dt>Platos</dt><dd id="s-count">0</dd></div>
+              <div class="big"><dt>Total estimado</dt><dd id="s-total">RD$0</dd></div>
+            </dl>
+            <p class="receipt__hint" id="s-hint" hidden>Incluye platos con precio «desde». El precio final lo confirma el restaurante.</p>
+            <a class="btn btn--block receipt__wa" id="wa" target="_blank" rel="noopener noreferrer"><span data-ic="chat" aria-hidden="true"></span>Enviar pedido por WhatsApp<span class="visually-hidden"> (se abre en una pestaña nueva)</span></a>
+            <p class="receipt__note"><b>Sin pagos en línea.</b> Este sitio no cobra ni confirma pedidos: el restaurante te responde por WhatsApp con disponibilidad, precio final y entrega.</p>
+            <div class="receipt__tools">
+              <button type="button" id="copy"><span data-ic="check" aria-hidden="true"></span>Copiar pedido</button>
+              <button type="button" class="is-danger" id="clear"><span data-ic="trash" aria-hidden="true"></span>Vaciar</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Carrito vacío -->
+    <div class="cempty" id="cempty" hidden>
+      <div class="cempty__art" aria-hidden="true">
+        <span class="cempty__plate"><span data-ic="pot"></span></span>
+        <span class="cempty__leaves tone-light jg-grow">
+          <svg class="jp jp--mon ce-1"><use href="#v-monstera"/></svg>
+          <svg class="jp jp--palm ce-2"><use href="#v-palm"/></svg>
+          <svg class="jp jp--fern ce-3"><use href="#v-fern"/></svg>
+        </span>
+        <svg class="bloom ce-4"><use href="#v-flower"/></svg>
+      </div>
+      <h2 id="cempty-t" tabindex="-1">Tu mesa está vacía</h2>
+      <p>Elige algo rico del menú o trae tus favoritos de un solo toque.</p>
+      <div class="cempty__btns">
+        <a class="btn" href="../menu/menu.html"><span data-ic="utensils" aria-hidden="true"></span>Explorar el menú</a>
+        <button class="btn btn--outline" type="button" id="cempty-fav" hidden></button>
+      </div>
+      <div class="cempty__feat">
+        <h3>Para empezar: <em>favoritos de la casa</em></h3>
+        <div class="dish-grid" id="cempty-grid"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="mbar" id="mbar">
+  <div class="mbar__t"><span id="m-count">0 platos</span><strong id="m-total">RD$0</strong></div>
+  <a class="btn" id="wa2" target="_blank" rel="noopener noreferrer"><span data-ic="chat" aria-hidden="true"></span>Enviar pedido<span class="visually-hidden"> por WhatsApp (se abre en una pestaña nueva)</span></a>
+</div>
+
+<div class="undo" id="undo" role="status" aria-live="polite" hidden>
+  <span id="undo-t"></span>
+  <button type="button" id="undo-b">Deshacer</button>
+</div>
+
+<dialog class="cdlg" id="cdlg" aria-labelledby="cdlg-t">
+  <form method="dialog">
+    <span class="cdlg__ic" data-ic="trash" aria-hidden="true"></span>
+    <h2 id="cdlg-t">¿Vaciar tu mesa?</h2>
+    <p>Se quitarán todos los platos de tu pedido. Podrás deshacerlo unos segundos después.</p>
+    <div class="cdlg__act">
+      <button class="btn btn--outline btn--sm" value="cancel">Cancelar</button>
+      <button class="btn btn--sm" value="ok" id="cdlg-ok">Sí, vaciar</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="site-footer"></div>
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/jungle.js"></script>
+<script src="../components/header/header.js"></script>
+<script src="../components/footer/footer.js"></script>
+<script src="../components/shared/botanical-art.js"></script>
+<script src="carrito.js"></script>
+<script src="../components/shared/boot.js"></script>
+</body>
+</html>

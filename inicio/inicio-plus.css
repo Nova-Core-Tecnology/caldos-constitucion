@@ -1,0 +1,199 @@
+/* ===== Inicio+ : capa de impacto visual (se carga DESPUÉS de inicio.css; no modifica sus archivos) =====
+   Todo está acotado a body[data-page="inicio"] y las clases nuevas empiezan por "plus-".
+   Para quitarla: borra este archivo, inicio-plus.js y sus dos líneas en inicio.html. */
+
+body[data-page="inicio"] { --plus-leaf: #8fb35a; --plus-leaf2: #b9cf86; --plus-gold: #ffc56b; }
+
+/* ---------- HERO ---------- */
+/* Más profundidad: añade un resplandor verde de huerta abajo a la izquierda sin quitar las capas originales */
+body[data-page="inicio"] .hero__tint {
+  background:
+    radial-gradient(circle at 74% 46%, rgba(232, 121, 58, .55), transparent 44%),
+    radial-gradient(ellipse 60% 55% at 0% 100%, rgba(204, 65, 37, .3), transparent 70%),
+    radial-gradient(ellipse 50% 45% at 100% 100%, rgba(95, 140, 60, .38), transparent 70%),
+    linear-gradient(90deg, rgba(46, 23, 14, .86) 0%, rgba(46, 23, 14, .55) 48%, rgba(46, 23, 14, .2) 100%);
+}
+/* Foco de luz que sigue al mouse (lo mueve inicio-plus.js con --px / --py) */
+body[data-page="inicio"] .hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(520px circle at var(--px, 72%) var(--py, 40%), rgba(255, 205, 130, .17), transparent 62%);
+  transition: background-position .2s;
+}
+
+/* Titular: la segunda línea brilla en dorado con un destello que la recorre */
+body[data-page="inicio"] .hero h1 .line:nth-child(2) > span {
+  background: linear-gradient(100deg, #ffe0a6 0%, #ffae4a 36%, #fff6dc 50%, #ffae4a 64%, #ffe0a6 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+  text-shadow: none;
+  animation: lineUp 1s .12s cubic-bezier(.2, .8, .2, 1) both, plus-shine 7s linear 1.4s infinite;
+}
+@keyframes plus-shine { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+
+/* Botón principal con pulso suave */
+body[data-page="inicio"] .hero__go { animation: fadeUp .8s .55s both, plus-pulse 3.2s ease-out 1.6s infinite; }
+@keyframes plus-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(232, 121, 58, .55); }
+  70% { box-shadow: 0 0 0 20px rgba(232, 121, 58, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 121, 58, 0); }
+}
+
+/* Plato: aureola giratoria + guarniciones de hierbas apoyadas en el borde */
+body[data-page="inicio"] .stage__art::before {
+  content: ""; position: absolute; z-index: -1; inset: -9%; border-radius: 50%; pointer-events: none;
+  background: conic-gradient(from 0deg, rgba(255, 197, 107, 0), rgba(255, 197, 107, .55), rgba(232, 121, 58, 0) 38%, rgba(143, 179, 90, .5) 66%, rgba(255, 197, 107, 0));
+  filter: blur(26px); animation: spin 26s linear infinite;
+}
+body[data-page="inicio"] .stage__art::after {
+  content: ""; position: absolute; z-index: 3; left: -3%; top: -1%; width: 36%; aspect-ratio: 1; pointer-events: none;
+  background: url("../assets/botanical/garnish-a.svg") center / contain no-repeat;
+  transform: rotate(-38deg); transform-origin: 50% 90%;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, .5));
+  animation: plus-sway 8s ease-in-out infinite alternate;
+}
+body[data-page="inicio"] .plate::after {
+  content: ""; position: absolute; z-index: 3; right: -9%; bottom: -7%; width: 34%; aspect-ratio: 1; pointer-events: none;
+  background: url("../assets/botanical/garnish-b.svg") center / contain no-repeat;
+  transform: rotate(26deg); transform-origin: 50% 90%;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, .5));
+  animation: plus-sway 9s ease-in-out -3s infinite alternate;
+}
+@keyframes plus-sway { from { rotate: -2.5deg; } to { rotate: 2.5deg; } }
+
+/* Franja de datos en cristal sobre el follaje */
+body[data-page="inicio"] .hinfo {
+  margin-top: 1.2rem; overflow: hidden; border: 1px solid rgba(246, 230, 211, .2); border-radius: 26px;
+  background: linear-gradient(135deg, rgba(46, 23, 14, .66), rgba(46, 23, 14, .42));
+  backdrop-filter: blur(14px) saturate(1.25); -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+body[data-page="inicio"] .hinfo__item { padding: 1.05rem 1.3rem; }
+body[data-page="inicio"] .hinfo__item:first-child { padding-left: 1.4rem; }
+body[data-page="inicio"] .hinfo__item { position: relative; }
+body[data-page="inicio"] .hinfo__item::after {
+  content: ""; position: absolute; left: 1.3rem; right: 1.3rem; bottom: 0; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--plus-gold), transparent); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.2, .8, .2, 1);
+}
+body[data-page="inicio"] .hinfo__item:hover::after { transform: scaleX(1); }
+
+/* Hojas que caen despacio por el hero (las crea inicio-plus.js) */
+.plus-leaves { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.plus-leaf { position: absolute; top: -60px; width: var(--w, 30px); height: var(--w, 30px); opacity: 0; will-change: transform;
+  animation: plus-fall var(--t, 24s) linear var(--dl, 0s) infinite; }
+.plus-leaf svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.plus-leaves.is-off .plus-leaf { animation-play-state: paused; }
+.plus-leaf .g4 { --lf: #78984d; } .plus-leaf .g5 { --lf: #96b362; } .plus-leaf .g6 { --lf: #b9cf86; } .plus-leaf .g3 { --lf: #5e7e42; }
+@keyframes plus-fall {
+  0% { transform: translate3d(0, 0, 0) rotate(var(--r0, -20deg)); opacity: 0; }
+  8% { opacity: .75; }
+  50% { transform: translate3d(var(--dx, 40px), 52vh, 0) rotate(calc(var(--r0, -20deg) + 140deg)); }
+  92% { opacity: .6; }
+  100% { transform: translate3d(calc(var(--dx, 40px) * -.6), 112vh, 0) rotate(calc(var(--r0, -20deg) + 300deg)); opacity: 0; }
+}
+
+/* ---------- CINTA CON LOS PLATOS (la inserta inicio-plus.js entre el hero y las secciones) ---------- */
+.plus-band {
+  position: relative; z-index: 4; width: 104%; margin: .9rem 0 -1.3rem -2%; overflow: hidden; transform: rotate(-1.4deg);
+  background: linear-gradient(90deg, #1b3317, #2e5524 50%, #1b3317);
+  border-block: 2px solid rgba(235, 190, 139, .55); box-shadow: 0 16px 36px rgba(20, 8, 3, .45); color: #f6e6d3;
+}
+.plus-band__track { display: flex; width: max-content; animation: plus-marquee 52s linear infinite; }
+.plus-band:hover .plus-band__track { animation-play-state: paused; }
+.plus-band__grp { display: flex; align-items: center; flex: none; }
+.plus-band__it { display: inline-flex; align-items: center; gap: 1.1rem; padding: .95rem 1.1rem .95rem 0; white-space: nowrap;
+  font: 800 1.08rem/1 var(--font-title, Georgia, serif); letter-spacing: .09em; text-transform: uppercase; }
+.plus-band__it svg { width: 26px; height: 26px; flex: none; overflow: visible; }
+.plus-band__it:nth-child(3n) { color: var(--plus-gold); }
+@keyframes plus-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ---------- SECCIONES ---------- */
+/* Etiquetas de sección con hoja */
+body[data-page="inicio"] :is(.feat, .kitchen, .wel) .eyebrow {
+  display: inline-flex; align-items: center; gap: .5rem; padding: .38rem 1rem .38rem .75rem; border-radius: 999px;
+  background: rgba(95, 130, 60, .14); border: 1px solid rgba(95, 130, 60, .38); color: #3f6128;
+  letter-spacing: .06em;
+}
+body[data-page="inicio"] .kitchen .eyebrow { background: rgba(235, 190, 139, .12); border-color: rgba(235, 190, 139, .4); color: var(--gold, #ebbe8b); }
+body[data-page="inicio"] :is(.feat, .kitchen, .wel) .eyebrow::before {
+  content: ""; width: 1.05em; height: 1.05em; flex: none; background: currentColor; border: 0; position: static; transform: none;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M20 3C9 3 4 9 4 16c0 1.5.3 2.8.8 4C6 14 10 10 15 8c-4 3-7 6-8.5 12.2 1 .5 2.2.8 3.5.8 7 0 10-5 10-18z'/></svg>") center / contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M20 3C9 3 4 9 4 16c0 1.5.3 2.8.8 4C6 14 10 10 15 8c-4 3-7 6-8.5 12.2 1 .5 2.2.8 3.5.8 7 0 10-5 10-18z'/></svg>") center / contain no-repeat;
+}
+
+/* Fondos con matices de huerta (solo imagen de fondo: el color de base no cambia) */
+body[data-page="inicio"] .feat { background-image: radial-gradient(ellipse 42% 34% at 100% 0, rgba(120, 150, 70, .16), transparent 70%), radial-gradient(ellipse 38% 32% at 0 100%, rgba(232, 121, 58, .1), transparent 70%); }
+body[data-page="inicio"] .wel { background-image: radial-gradient(ellipse 40% 36% at 0 0, rgba(120, 150, 70, .15), transparent 70%), radial-gradient(ellipse 40% 34% at 100% 100%, rgba(232, 121, 58, .1), transparent 70%); }
+
+/* Plato protagonista: resplandor + ramita en el borde del plato */
+body[data-page="inicio"] .dlead { box-shadow: var(--shadow), 0 0 0 1px rgba(235, 190, 139, .25), 0 30px 80px rgba(232, 121, 58, .22); }
+body[data-page="inicio"] .dlead__plate::after {
+  content: ""; position: absolute; z-index: 3; right: -12%; top: -9%; width: 44%; aspect-ratio: 1; pointer-events: none;
+  background: url("../assets/botanical/garnish-a.svg") center / contain no-repeat; transform: rotate(32deg); transform-origin: 50% 90%;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .45)); animation: plus-sway 8s ease-in-out infinite alternate;
+}
+/* Filas de favoritos: asoma una ramita al pasar el cursor */
+body[data-page="inicio"] .dpick::after {
+  content: ""; position: absolute; right: 70px; top: -24px; width: 60px; height: 60px; pointer-events: none;
+  background: url("../assets/botanical/garnish-s.svg") center / contain no-repeat;
+  opacity: 0; transform: translateY(10px) rotate(14deg) scale(.7); transform-origin: 50% 100%;
+  transition: opacity .3s ease, transform .5s cubic-bezier(.2, .8, .2, 1);
+}
+body[data-page="inicio"] .dpick:hover::after, body[data-page="inicio"] .dpick:focus-within::after { opacity: 1; transform: rotate(8deg) scale(1); }
+
+/* Nuestra cocina: medallas flotando y tarjetas con inclinación 3D (inclinación = --rx / --ry desde JS) */
+body[data-page="inicio"] .kcard__medal { animation: plus-float 5.5s ease-in-out infinite; }
+body[data-page="inicio"] .kcard:nth-child(2) .kcard__medal { animation-delay: -1.8s; }
+body[data-page="inicio"] .kcard:nth-child(3) .kcard__medal { animation-delay: -3.4s; }
+@keyframes plus-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+body[data-page="inicio"] .kcard { box-shadow: 0 18px 40px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .06); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  body[data-page="inicio"] .kcard:hover, body[data-page="inicio"] .kcard:focus-visible {
+    transform: perspective(900px) translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  }
+}
+
+/* Bienvenido: ramitas sobre las fotos de la composición */
+body[data-page="inicio"] .wel__ph--a::after {
+  content: ""; position: absolute; z-index: 3; left: -8%; top: -5%; width: 34%; aspect-ratio: 1; pointer-events: none;
+  background: url("../assets/botanical/garnish-b.svg") center / contain no-repeat; transform: rotate(-24deg); transform-origin: 50% 90%;
+  filter: drop-shadow(0 8px 10px rgba(46, 23, 14, .35)); animation: plus-sway 9s ease-in-out infinite alternate;
+}
+body[data-page="inicio"] .wel__ph--c::before {
+  content: ""; position: absolute; z-index: 3; right: -7%; bottom: -12%; width: 40%; aspect-ratio: 1; pointer-events: none;
+  background: url("../assets/botanical/garnish-a.svg") center / contain no-repeat; transform: rotate(18deg) scaleX(-1); transform-origin: 50% 90%;
+  filter: drop-shadow(0 8px 10px rgba(46, 23, 14, .35)); animation: plus-sway 10s ease-in-out -4s infinite alternate;
+}
+body[data-page="inicio"] .wel__stats b { font-variant-numeric: tabular-nums; }
+
+/* Cierre: botón dorado con pulso */
+body[data-page="inicio"] .visit .btn--gold { animation: plus-pulse-gold 3.4s ease-out 1s infinite; }
+@keyframes plus-pulse-gold {
+  0% { box-shadow: 0 0 0 0 rgba(255, 197, 107, .6); }
+  70% { box-shadow: 0 0 0 18px rgba(255, 197, 107, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 197, 107, 0); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  body[data-page="inicio"] .stage__art::after { width: 30%; left: 0; top: -2%; }
+  body[data-page="inicio"] .plate::after { width: 30%; }
+  .plus-band { margin-block: .8rem -1rem; }
+}
+@media (max-width: 520px) {
+  .plus-band__it { font-size: .92rem; padding-block: .8rem; }
+  body[data-page="inicio"] .dpick::after { display: none; }
+  body[data-page="inicio"] .wel__ph--a::after, body[data-page="inicio"] .wel__ph--c::before { width: 28%; }
+}
+
+/* ---------- Movimiento reducido: sin hojas que caen, sin cinta en movimiento, sin destellos ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .plus-leaves { display: none; }
+  .plus-band__track { animation: none; }
+  body[data-page="inicio"] .hero h1 .line:nth-child(2) > span { animation: lineUp 1s .12s cubic-bezier(.2, .8, .2, 1) both; }
+  body[data-page="inicio"] .hero__go, body[data-page="inicio"] .visit .btn--gold,
+  body[data-page="inicio"] .kcard__medal, body[data-page="inicio"] .stage__art::before,
+  body[data-page="inicio"] .stage__art::after, body[data-page="inicio"] .plate::after,
+  body[data-page="inicio"] .dlead__plate::after, body[data-page="inicio"] .wel__ph--a::after,
+  body[data-page="inicio"] .wel__ph--c::before { animation: none; }
+}
+@media print { .plus-leaves, .plus-band { display: none; } }

@@ -1,0 +1,168 @@
+/* Caldos Constitución — vegetación tropical compartida (monstera, palmas, helechos, enredaderas, cayenas).
+   Solo adorno: siempre detrás del contenido, sin eventos de puntero y quieta con "reducir movimiento".
+   Las piezas se declaran en el HTML (.jg, .jp, .vine) o con un preset: <section data-jungle="light-a">. */
+
+@keyframes jsway { from { transform: rotate(-1.8deg); } to { transform: rotate(1.8deg); } }
+@keyframes vsway { from { transform: rotate(-2.4deg); } to { transform: rotate(2.4deg); } }
+@keyframes flutter { from { rotate: -7deg; } to { rotate: 7deg; } }
+@keyframes bloomIn { from { opacity: 0; transform: scale(.2) rotate(-90deg); } to { opacity: 1; transform: none; } }
+@keyframes bloomBob { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -6px; rotate: 8deg; } }
+@keyframes jfall {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  8% { opacity: var(--o, .8); }
+  88% { opacity: var(--o, .8); }
+  100% { transform: translate3d(var(--dx, 60px), var(--fh, 900px), 0) rotate(var(--rot, 360deg)); opacity: 0; }
+}
+@keyframes wobble { from { translate: -14px 0; rotate: -18deg; } to { translate: 14px 0; rotate: 18deg; } }
+@keyframes firefly {
+  0%, 100% { translate: 0 0; opacity: 0; }
+  15% { opacity: var(--o, .9); }
+  50% { translate: var(--fx, 30px) var(--fy, -40px); opacity: .25; }
+  70% { opacity: var(--o, .9); }
+}
+
+/* ---- Sprite y colores de cada parte ---- */
+.v-sprite { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+.v-leaf { fill: var(--lf, #3f5e33); }
+.v-leaf2 { fill: var(--lf2, #54733a); }
+.v-leaf3 { fill: var(--lf3, #2f4a2b); }
+.v-vein { stroke: var(--lv, rgba(255, 248, 240, .22)); }
+.v-stem { stroke: var(--ls, #4a5a30); }
+.v-petal { fill: var(--fl, #E5533A); stroke: rgba(122, 30, 19, .35); stroke-width: .8; }
+.v-eye { fill: #8E2414; }
+.v-pistil { stroke: var(--gold, #EBBE8B); }
+.v-pollen { fill: #FFC56B; }
+
+/* ---- Tonos: verdes profundos sobre crema, selva oscura sobre marrón, sombras sobre rojo, vivos para trepadoras ---- */
+.tone-light { --g1: #2f4a2b; --g2: #3f5e33; --g3: #54733a; --g4: #6e8a47; --g5: #8fa65b; --lv: rgba(255, 248, 240, .24); --ls: #4a5a30; }
+.tone-dark { --g1: #1b311e; --g2: #254127; --g3: #325534; --g4: #436b3d; --g5: #5a854a; --lv: rgba(235, 190, 139, .16); --ls: #2d4a2c; }
+.tone-shade { --g1: #2a1a0c; --g2: #33301a; --g3: #3b4424; --g4: #4c5a2e; --g5: #60703a; --lv: rgba(255, 248, 240, .1); --ls: #33301a; }
+.tone-vivid { --g1: #3a6631; --g2: #4b7e3d; --g3: #62974b; --g4: #80b05c; --g5: #a6c87a; --lv: rgba(255, 255, 255, .26); --ls: #2f5a2b; }
+.tone-light, .tone-dark, .tone-shade, .tone-vivid { --lf: var(--g2); --lf2: var(--g3); --lf3: var(--g1); }
+.t-soft { --lf: var(--g3); --lf2: var(--g4); --lf3: var(--g2); }
+/* En fondos oscuros las enredaderas van un poco más claras para que se lean */
+.tone-dark .vine, .vine.tone-dark { --g1: #33562f; --g2: #436b3b; --g3: #567f46; --g4: #6f9a56; --g5: #8db46b; --ls: #456b3a; --lv: rgba(255, 248, 240, .2); }
+
+/* ---- Capa de selva: detrás del contenido de su sección ---- */
+.has-jg { position: relative; isolation: isolate; }
+.jg { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: layout paint; }
+.tone-shade.jg, .jg.is-shade { mix-blend-mode: multiply; }
+
+/* ---- Pieza: se coloca por la base del tallo (--bx, --by), con ancho --w, giro --r y volteo --sx ---- */
+.jp {
+  position: absolute; display: block; overflow: visible; width: var(--w, 300px); height: auto; pointer-events: none;
+  rotate: var(--r, 0deg); scale: var(--sx, 1) 1;
+  opacity: 0; transform: scale(.5);
+  transition: opacity 1.2s ease var(--d, 0s), transform 1.8s cubic-bezier(.2, .8, .2, 1) var(--d, 0s);
+  filter: var(--blur, none);
+}
+.jp--mon { aspect-ratio: 210 / 236; transform-origin: 49.5% 100%; left: calc(var(--bx, 0px) - var(--w, 300px) * .495); top: calc(var(--by, 100%) - var(--w, 300px) * 1.124); }
+.jp--palm { aspect-ratio: 300 / 270; transform-origin: 6.7% 92.6%; left: calc(var(--bx, 0px) - var(--w, 300px) * .067); top: calc(var(--by, 100%) - var(--w, 300px) * .833); }
+.jp--fern { aspect-ratio: 200 / 250; transform-origin: 5% 96%; left: calc(var(--bx, 0px) - var(--w, 300px) * .05); top: calc(var(--by, 100%) - var(--w, 300px) * 1.2); }
+.jp use { transform-box: view-box; transform-origin: inherit; }
+.is-in .jp, .jp.is-in { opacity: var(--o, 1); transform: none; }
+.is-in .jp use { animation: jsway var(--s, 9s) ease-in-out var(--sd, -2s) infinite alternate; }
+.is-off .jp use, .is-off .vine svg, .is-off .vl use, .is-off .fall__leaf, .is-off .fly { animation-play-state: paused; }
+
+/* ---- Imágenes botánicas del sitio (esquinas y bordes de enredadera) ---- */
+.jimg { position: absolute; display: block; background: center / contain no-repeat; opacity: 0; transition: opacity 1.6s ease .2s; pointer-events: none; }
+.is-in .jimg { opacity: var(--o, .9); }
+.jimg--corner { width: clamp(200px, 26vw, 380px); aspect-ratio: 1; }
+.jimg--edge { width: clamp(360px, 46vw, 680px); aspect-ratio: 900 / 150; }
+
+/* ---- Enredaderas generadas (cuelgan, trepan o se tienden como guirnalda) ---- */
+.vine { position: absolute; top: 0; z-index: 0; display: block; pointer-events: none; }
+.vine svg { display: block; overflow: visible; }
+.vine[data-vine="hang"] svg { transform-origin: 50% 0; animation: vsway var(--s, 7s) ease-in-out var(--sd, 0s) infinite alternate; }
+.vine[data-vine="drape"] svg, .vine[data-vine="garland"] svg { transform-origin: 50% 0; animation: vsway 11s ease-in-out infinite alternate; }
+.vine[data-vine="garland"] svg { animation-duration: 16s; }
+.vs { fill: none; stroke: var(--ls); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.4s cubic-bezier(.45, 0, .2, 1) var(--d0, 0s); }
+.vs--thin { stroke-width: 1.3; opacity: .8; }
+.vine.is-in .vs { stroke-dashoffset: 0; }
+.vl > g { scale: 0; transition: scale .8s cubic-bezier(.2, .9, .3, 1.25) var(--d, 0s); }
+.vine.is-in .vl > g { scale: 1; }
+.vl use { animation: flutter var(--s, 5s) ease-in-out var(--sd, 0s) infinite alternate; }
+.vl.c1 { --lf: var(--g1); } .vl.c2 { --lf: var(--g2); } .vl.c3 { --lf: var(--g3); } .vl.c4 { --lf: var(--g4); } .vl.c5 { --lf: var(--g5); }
+.vl--flower use { animation: none; filter: drop-shadow(0 3px 4px rgba(46, 23, 14, .35)); }
+
+/* ---- Cayenas sueltas ---- */
+.bloom { position: absolute; z-index: 3; display: block; width: 64px; aspect-ratio: 1; overflow: visible; pointer-events: none; filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .35)); animation: bloomIn 1s 1.3s cubic-bezier(.2, .8, .2, 1.2) both, bloomBob 6s 2.3s ease-in-out infinite; }
+
+/* ---- Hojas que caen y luciérnagas ---- */
+.fall { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.fall__leaf { position: absolute; top: -70px; display: block; overflow: visible; animation: jfall var(--t, 16s) linear var(--dl, 0s) infinite; }
+.fall__leaf use { animation: wobble calc(var(--t, 16s) / 5) ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+.fly { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: #ffe7a3; box-shadow: 0 0 6px 2px rgba(255, 214, 120, .8), 0 0 18px 6px rgba(255, 190, 90, .35); opacity: 0; animation: firefly var(--t, 9s) ease-in-out var(--dl, 0s) infinite; pointer-events: none; }
+
+/* ==========================================================================
+   Posiciones genéricas para los presets (data-jungle)
+   ========================================================================== */
+.jz-palm-tl { --bx: -14px; --by: -14px; --w: clamp(260px, 30vw, 440px); --r: 92deg; --o: .9; --s: 11s; }
+.jz-palm-tr { --bx: calc(100% + 14px); --by: 24px; --w: clamp(280px, 34vw, 500px); --r: -96deg; --sx: -1; --o: .85; --s: 13s; --sd: -5s; --d: .2s; }
+.jz-palm-bl { --bx: -20px; --by: calc(100% - 10px); --w: clamp(240px, 26vw, 380px); --r: -8deg; --o: .9; --d: .3s; --s: 12s; }
+.jz-palm-br { --bx: calc(100% + 14px); --by: calc(100% + 14px); --w: clamp(240px, 28vw, 420px); --r: 4deg; --sx: -1; --o: .85; --d: .3s; --s: 10s; }
+.jz-mon-bl { --bx: 60px; --by: calc(100% + 40px); --w: clamp(200px, 22vw, 320px); --r: 24deg; --o: .85; --d: .35s; }
+.jz-mon-tr { --bx: calc(100% - 60px); --by: 320px; --w: clamp(190px, 20vw, 300px); --r: -28deg; --sx: -1; --o: .9; }
+.jz-mon-r { --bx: calc(100% + 30px); --by: 70%; --w: clamp(170px, 17vw, 240px); --r: -34deg; --sx: -1; --o: .85; --d: .3s; }
+.jz-mon-l { --bx: -30px; --by: 80%; --w: clamp(180px, 20vw, 280px); --r: 38deg; --o: .9; }
+.jz-mon-b { --bx: 50%; --by: calc(100% + 130px); --w: clamp(190px, 18vw, 250px); --r: 14deg; --o: .4; --d: .5s; }
+.jz-fern-br { --bx: calc(100% - 20px); --by: calc(100% - 10px); --w: clamp(160px, 17vw, 250px); --r: -12deg; --sx: -1; --o: .9; --d: .5s; }
+.jz-fern-bl { --bx: -12px; --by: calc(100% + 12px); --w: clamp(170px, 18vw, 260px); --r: 6deg; --o: .9; }
+.jz-fern-r { --bx: calc(100% + 12px); --by: 64%; --w: clamp(150px, 16vw, 230px); --r: -24deg; --sx: -1; --o: .85; --d: .3s; }
+.jz-fern-l { --bx: -12px; --by: 46%; --w: clamp(150px, 15vw, 220px); --r: 28deg; --o: .85; --d: .4s; }
+.jz-v-l1 { left: calc(2.6% - 60px); --s: 7s; }
+.jz-v-l2 { left: calc(6% - 60px); --s: 8.5s; --sd: -3s; }
+.jz-v-r1 { right: calc(2.6% - 60px); --s: 9s; --sd: -1.5s; }
+.jz-v-r2 { right: calc(6% - 60px); --s: 7.5s; --sd: -2s; }
+.jz-corner-tr { top: 0; right: 0; transform: scaleX(-1); background-image: url("../../assets/botanical/corner-a.svg"); --o: .75; }
+.jz-corner-tl { top: 0; left: 0; background-image: url("../../assets/botanical/corner-b.svg"); --o: .75; }
+.jz-edge-t { top: 0; left: 0; background-image: url("../../assets/botanical/edge-a.svg"); --o: .7; }
+/* Piezas a media altura en secciones largas (por ejemplo la carta completa) */
+.jz-mon-l2 { --bx: -40px; --by: 46%; --w: clamp(170px, 17vw, 250px); --r: 50deg; --o: .8; }
+.jz-palm-r2 { --bx: calc(100% + 14px); --by: 30%; --w: clamp(220px, 24vw, 340px); --r: -70deg; --sx: -1; --o: .75; }
+.jz-fern-l3 { --bx: -12px; --by: 78%; --w: clamp(150px, 15vw, 220px); --r: 36deg; --o: .8; }
+.jz-mon-r3 { --bx: calc(100% + 40px); --by: 88%; --w: clamp(170px, 17vw, 240px); --r: -40deg; --sx: -1; --o: .8; }
+
+/* Hero de página interior (Carrito, Favoritos, Reservas): más compacto */
+.jg--page .jz-palm-tl { --w: clamp(220px, 24vw, 360px); }
+.jg--page .jz-palm-tr { --w: clamp(240px, 26vw, 400px); --by: 10px; }
+.jg--page .jz-fern-br { --by: calc(100% + 30px); }
+
+/* Setos del sitio (botanical-art.js) al pie de las secciones con data-hedge */
+.botanical-layer--jg .botanical-deco--hedge { opacity: .9; }
+.botanical-layer--jg[data-theme="dark"] .botanical-deco--hedge { opacity: .7; }
+
+/* ==========================================================================
+   Responsive: las enredaderas viven en el margen libre; sin margen, se retiran
+   ========================================================================== */
+@media (max-width: 1380px) { .jz-v-l2, .jz-v-r2 { display: none; } }
+@media (max-width: 1240px) {
+  .jg:not(.tone-dark):not(.tone-shade) .jz-v-l1, .jg:not(.tone-dark):not(.tone-shade) .jz-v-r1 { display: none; }
+  .tone-dark .jz-v-l1 { left: auto; right: 15%; }
+}
+@media (max-width: 960px) {
+  .jz-mon-tr, .jz-mon-r, .jz-mon-l, .jz-mon-l2, .jz-mon-r3 { --o: .35; }
+  .tone-dark.jg, .tone-shade.jg { opacity: .75; }
+  .jz-palm-r2, .jz-fern-l3 { display: none; }
+}
+@media (max-width: 600px) {
+  .jz-palm-tl { --w: 220px; --o: .7; }
+  .jz-palm-tr { --w: 240px; --o: .7; }
+  .jz-v-r1 { display: none; }
+  .tone-dark .jz-v-l1 { right: 2%; }
+  .jimg--corner { width: 180px; --o: .55; }
+  .jimg--edge { --o: .5; }
+  .jz-fern-br, .jz-fern-bl, .jz-fern-r, .jz-fern-l { --w: 140px; --o: .6; }
+  .jz-palm-bl, .jz-palm-br, .jz-mon-bl { --w: 200px; --o: .55; }
+}
+
+/* ---- Movimiento reducido: la vegetación aparece completa y quieta ---- */
+@media (prefers-reduced-motion: reduce) {
+  .jp { opacity: var(--o, 1); transform: none; transition: none; }
+  .jp use, .vine svg, .vl use, .bloom { animation: none !important; }
+  .jimg { opacity: var(--o, .9); transition: none; }
+  .vs { stroke-dashoffset: 0; transition: none; }
+  .vl > g { scale: 1; transition: none; }
+  .fall, .fly { display: none; }
+}
+@media print { .jg, .vine, .fall, .bloom { display: none !important; } }

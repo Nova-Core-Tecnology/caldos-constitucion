@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Favoritos | Caldos Constitución And Restaurant</title>
+<meta name="description" content="Tu colección de platos favoritos de Caldos Constitución And Restaurant: fíltralos, compártelos y pásalos a tu pedido de un toque.">
+<meta name="theme-color" content="#FFF8F0">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="Caldos Constitución And Restaurant">
+<meta property="og:title" content="Favoritos | Caldos Constitución And Restaurant">
+<meta property="og:description" content="Tu colección de platos favoritos de Caldos Constitución And Restaurant: fíltralos, compártelos y pásalos a tu pedido de un toque.">
+<meta property="og:image" content="../assets/logo/logo.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="../components/shared/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<link rel="stylesheet" href="../components/shared/botanical.css">
+<link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="favoritos.css">
+</head>
+<body data-page="favoritos">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div id="site-header"></div>
+<main id="main">
+
+<!-- Hero: la colección y sus cifras -->
+<section class="fh" data-jungle="page">
+  <div class="wrap fh__in">
+    <div class="fh__tx">
+      <span class="fh__k">Tu selección</span>
+      <h1>Tus <em>favoritos</em>, siempre a mano</h1>
+      <p class="lead">Los platos que marcaste con el corazón se guardan en este dispositivo. Fíltralos, compártelos o pásalos a tu pedido de un toque.</p>
+    </div>
+    <div class="fh__art" aria-hidden="true">
+      <span class="fh__heart"><span data-ic="heart"></span></span>
+      <span class="fh__ring"></span>
+      <span class="fh__leaves tone-vivid jg-grow">
+        <svg class="jp jp--mon fa-1"><use href="#v-monstera"/></svg>
+        <svg class="jp jp--palm fa-2"><use href="#v-palm"/></svg>
+        <svg class="jp jp--fern fa-3"><use href="#v-fern"/></svg>
+      </span>
+      <svg class="bloom fa-4"><use href="#v-flower"/></svg>
+      <svg class="bloom fa-5"><use href="#v-flower"/></svg>
+    </div>
+  </div>
+  <div class="wrap"><ul class="fstats" id="fstats" hidden></ul></div>
+</section>
+
+<section class="section fsec" data-jungle="light-a" data-hedge="light">
+  <div class="wrap">
+
+    <!-- Con favoritos -->
+    <div class="coll" id="coll" hidden>
+      <div class="tools" id="tools">
+        <div class="tools__row">
+          <div class="chips" id="fchips" role="group" aria-label="Filtrar favoritos por categoría"></div>
+          <div class="tools__sort"><label for="fsort">Ordenar</label>
+            <select id="fsort">
+              <option value="saved">Como los guardé</option>
+              <option value="asc">Precio: menor a mayor</option>
+              <option value="desc">Precio: mayor a menor</option>
+              <option value="az">Nombre: A a Z</option>
+            </select>
+          </div>
+        </div>
+        <div class="tools__acts">
+          <p class="tools__count" id="fcount" role="status" aria-live="polite"></p>
+          <button class="btn btn--sm" type="button" id="addall"><span data-ic="cart" aria-hidden="true"></span><span id="addall-t">Añadir todos al pedido</span></button>
+          <a class="btn btn--sm btn--outline" id="share" target="_blank" rel="noopener noreferrer"><span data-ic="chat" aria-hidden="true"></span>Compartir lista<span class="visually-hidden"> por WhatsApp (se abre en una pestaña nueva)</span></a>
+          <button class="tools__clear" type="button" id="clearfav"><span data-ic="trash" aria-hidden="true"></span>Quitar todos</button>
+        </div>
+      </div>
+      <div class="dish-grid fgrid-d" id="fgrid"></div>
+    </div>
+
+    <!-- Sin favoritos -->
+    <div class="fempty" id="fempty" hidden>
+      <div class="fempty__art" aria-hidden="true">
+        <span class="fempty__heart"><span data-ic="heart"></span></span>
+        <span class="fempty__leaves tone-light jg-grow">
+          <svg class="jp jp--mon fe-1"><use href="#v-monstera"/></svg>
+          <svg class="jp jp--palm fe-2"><use href="#v-palm"/></svg>
+          <svg class="jp jp--fern fe-3"><use href="#v-fern"/></svg>
+        </span>
+      </div>
+      <h2 id="fempty-t" tabindex="-1">Aún no guardas favoritos</h2>
+      <p>Toca el <b>corazón</b> en cualquier plato y aparecerá aquí. Puedes empezar con estos:</p>
+      <a class="btn" href="../menu/menu.html"><span data-ic="utensils" aria-hidden="true"></span>Explorar el menú</a>
+    </div>
+
+    <!-- Recomendaciones -->
+    <section class="recs" id="recs" aria-labelledby="recs-t">
+      <div class="recs__head">
+        <span class="recs__k" id="recs-k">Te puede gustar</span>
+        <h2 id="recs-t">Más platos para <em>tu colección</em></h2>
+        <p id="recs-p">Toca el corazón para guardarlos.</p>
+      </div>
+      <div class="dish-grid" id="rgrid"></div>
+    </section>
+  </div>
+</section>
+</main>
+
+<div class="undo" id="undo" role="status" aria-live="polite" hidden>
+  <span id="undo-t"></span>
+  <button type="button" id="undo-b">Deshacer</button>
+</div>
+
+<div id="site-footer"></div>
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/jungle.js"></script>
+<script src="../components/header/header.js"></script>
+<script src="../components/footer/footer.js"></script>
+<script src="../components/shared/botanical-art.js"></script>
+<script src="favoritos.js"></script>
+<script src="../components/shared/boot.js"></script>
+</body>
+</html>

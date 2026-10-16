@@ -1,0 +1,13 @@
+VIDEO DEL HERO (sección principal de Inicio)
+
+Coloca aquí tu video con este nombre exacto:
+
+    hero.mp4      (H.264; arranca solo al entrar y siempre en silencio, así que conviene exportarlo sin audio)
+
+Recomendaciones para que cargue rápido:
+  - Duración de 8 a 20 segundos (se repite en bucle), resolución 1920x1080 o 1280x720.
+  - Peso máximo aproximado: 4-6 MB (bitrate ~2-3 Mbps). Sin audio pesa menos.
+  - Usa una toma sin textos importantes: el texto del sitio va encima y se oscurece el video.
+
+Mientras el archivo no exista, el sitio muestra una ilustración en su lugar y funciona normal.
+Si quieres añadir un formato WebM, agrega otra línea <source> en inicio/inicio.html.
