@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pagar pedido | Caldos Constitución And Restaurant</title>
+<meta name="description" content="Paga tu pedido de Caldos Constitución: 100 % para recoger o 50 % para domicilio, por transferencia o PayPal.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2E170E">
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="../components/shared/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<link rel="stylesheet" href="../components/shared/botanical.css">
+<link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="../components/shared/auth.css">
+<link rel="stylesheet" href="pagar.css?v=20261017">
+</head>
+<body data-page="carrito">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div id="site-header"></div>
+<main id="main" class="py">
+
+<section class="py-head">
+  <div class="wrap">
+    <a class="py-back" href="../carrito/carrito.html"><span data-ic="left" aria-hidden="true"></span>Volver al carrito</a>
+    <h1>Pagar pedido</h1>
+    <ol class="py-steps" aria-label="Pasos">
+      <li class="is-on"><b>1</b>Entrega</li><li id="ps2"><b>2</b>Pago</li><li id="ps3"><b>3</b>Listo</li>
+    </ol>
+  </div>
+</section>
+
+<section class="py-body">
+  <div class="wrap">
+    <div class="py-alert" id="py-off" hidden></div>
+
+    <div class="py-grid" id="py">
+      <div class="py-main">
+        <!-- 1. Entrega -->
+        <section class="py-card" aria-labelledby="h1d">
+          <h2 id="h1d"><span class="py-n">1</span>¿Cómo lo quieres?</h2>
+          <fieldset class="py-modes">
+            <legend class="visually-hidden">Modalidad</legend>
+            <label class="py-mode"><input type="radio" name="mode" value="recoger"><span><span data-ic="pin" class="py-mode__ic"></span><b>Para recoger</b><small>Pagas el <strong>100 %</strong> ahora</small></span></label>
+            <label class="py-mode"><input type="radio" name="mode" value="domicilio"><span><span data-ic="home" class="py-mode__ic"></span><b>A domicilio</b><small>Pagas el <strong>50 %</strong> ahora y el resto al recibir</small></span></label>
+            <label class="py-mode"><input type="radio" name="mode" value="mesa"><span><span data-ic="utensils" class="py-mode__ic"></span><b>Comer aquí</b><small>Pagas el <strong>50 %</strong> ahora y el resto en el local</small></span></label>
+          </fieldset>
+          <div class="form-grid py-form">
+            <div class="field"><label for="p-name">Nombre</label><input id="p-name" autocomplete="name" maxlength="80" required><span class="error-msg" id="p-name-e"></span></div>
+            <div class="field"><label for="p-phone">Teléfono / WhatsApp</label><input id="p-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" required placeholder="809 555 1234"><span class="error-msg" id="p-phone-e"></span></div>
+            <div class="field field--full" id="p-addr-f" hidden><label for="p-addr">Dirección de entrega</label><input id="p-addr" autocomplete="street-address" maxlength="200" placeholder="Calle, número, sector y una referencia"><span class="error-msg" id="p-addr-e"></span></div>
+            <div class="field"><label for="p-time">Hora deseada <span class="opt">(opcional)</span></label><input id="p-time" type="time"></div>
+            <div class="field"><label for="p-note">Nota para la cocina <span class="opt">(opcional)</span></label><input id="p-note" maxlength="200" placeholder="Sin picante, salsa aparte…"></div>
+          </div>
+        </section>
+
+        <!-- 2. Pago -->
+        <section class="py-card" aria-labelledby="h2p">
+          <h2 id="h2p"><span class="py-n">2</span>Paga <span id="pay-pct">el 100 %</span>: <em id="pay-now">RD$0</em></h2>
+          <p class="py-sub" id="pay-sub"></p>
+          <div class="py-tabs" role="tablist" id="tabs"></div>
+
+          <!-- Transferencia -->
+          <div class="py-pane" id="pane-transfer" role="tabpanel" hidden>
+            <p class="py-help">Transfiere <b id="t-amt">RD$0</b> a una de estas cuentas y sube la foto o captura del comprobante.</p>
+            <ul class="py-banks" id="banks"></ul>
+            <p class="py-help py-help--soft" id="t-note" hidden></p>
+            <div class="form-grid py-form">
+              <div class="field"><label for="t-ref">Número de referencia o confirmación</label><input id="t-ref" maxlength="60" autocomplete="off" placeholder="Ej.: 123456789"><span class="error-msg" id="t-ref-e"></span></div>
+              <div class="field"><label for="t-from">Banco desde el que transferiste <span class="opt">(opcional)</span></label><input id="t-from" maxlength="60" placeholder="Ej.: Banreservas"></div>
+              <div class="field field--full">
+                <span class="py-flbl">Comprobante</span>
+                <label class="py-drop" id="t-drop"><input type="file" id="t-file" accept="image/*" class="visually-hidden"><span class="py-drop__ic" data-ic="download"></span><b id="t-file-t">Sube la captura del comprobante</b><small>Foto o captura de pantalla (JPG o PNG)</small><img id="t-prev" alt="Vista previa del comprobante" hidden></label>
+                <span class="error-msg" id="t-file-e"></span>
+              </div>
+            </div>
+            <button type="button" class="btn btn--block py-pay" id="t-send"><span class="spin" hidden></span><span data-ic="check"></span><span id="t-send-t">Enviar pedido y comprobante</span></button>
+          </div>
+
+          <!-- PayPal -->
+          <div class="py-pane" id="pane-paypal" role="tabpanel" hidden>
+            <p class="py-help">Pagarás <b id="pp-usd">US$0.00</b> con PayPal o tarjeta (tasa del restaurante: <span id="pp-rate"></span>). PayPal cobra en dólares.</p>
+            <div id="pp-btns" class="py-pp"></div>
+            <p class="py-help py-help--soft">Al aprobar el pago, tu pedido se envía automáticamente. El restaurante confirma la transacción antes de prepararlo.</p>
+          </div>
+
+          <!-- Azul -->
+          <div class="py-pane" id="pane-azul" role="tabpanel" hidden>
+            <div class="py-soon"><span data-ic="shield"></span><b>Pago con tarjeta (Azul) muy pronto</b><p>Estamos activando el cobro seguro con tarjeta. Mientras tanto, paga por transferencia o con PayPal.</p></div>
+          </div>
+
+          <div class="py-err" id="py-err" role="alert" hidden></div>
+          <p class="py-fine"><span data-ic="shield"></span>Tu pedido queda <b>pendiente de verificación del pago</b>. Te avisamos en «Mi cuenta» cuando se confirme y empiece a prepararse.</p>
+        </section>
+      </div>
+
+      <!-- Resumen -->
+      <aside class="py-side" aria-label="Resumen del pedido">
+        <div class="py-sum">
+          <h2>Tu pedido</h2>
+          <ul class="py-lines" id="lines"></ul>
+          <dl class="py-tot">
+            <div><dt>Total del pedido</dt><dd id="s-total">RD$0</dd></div>
+            <div class="py-tot__now"><dt>Pagas ahora (<span id="s-pct">100</span> %)</dt><dd id="s-now">RD$0</dd></div>
+            <div class="py-tot__later" id="s-later-r"><dt id="s-later-l">Pagas al recibir</dt><dd id="s-later">RD$0</dd></div>
+          </dl>
+          <p class="py-note" id="s-note" hidden></p>
+        </div>
+        <ul class="py-trust">
+          <li><span data-ic="shield"></span>Tus datos de pago no pasan por este sitio</li>
+          <li><span data-ic="bell"></span>Te avisamos cuando se verifique el pago</li>
+          <li><span data-ic="chat"></span>¿Dudas? <a id="wa-help" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a></li>
+        </ul>
+      </aside>
+    </div>
+
+    <div class="py-done" id="done" hidden></div>
+  </div>
+</section>
+</main>
+
+<div id="site-footer"></div>
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/auth-config.js"></script>
+<script src="../components/shared/menu-live.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/jungle.js"></script>
+<script src="../components/shared/auth.js"></script>
+<script src="../components/shared/orders.js?v=20261017"></script>
+<script src="../components/header/header.js"></script>
+<script src="../components/footer/footer.js"></script>
+<script src="pagar.js?v=20261017"></script>
+<script src="../components/shared/boot.js"></script>
+</body>
+</html>

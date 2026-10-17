@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eventos | Caldos Constitución And Restaurant</title>
+<meta name="description" content="Celebra tu cumpleaños, aniversario, graduación o reunión en Caldos Constitución And Restaurant. Solicita tu evento y te enviamos una cotización.">
+<meta name="theme-color" content="#FFF8F0">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="Caldos Constitución And Restaurant">
+<meta property="og:title" content="Eventos | Caldos Constitución And Restaurant">
+<meta property="og:description" content="Cumpleaños, aniversarios, reuniones y más: solicita tu evento y te enviamos una cotización.">
+<meta property="og:image" content="../assets/logo/logo.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="../components/shared/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<link rel="stylesheet" href="../components/shared/botanical.css">
+<link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="../components/shared/auth.css">
+<link rel="stylesheet" href="../components/shared/booking.css">
+<link rel="stylesheet" href="eventos.css">
+</head>
+<body data-page="eventos">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div id="site-header"></div>
+<main id="main">
+
+<section class="bh bh--ev" data-jungle="page">
+  <div class="wrap bh__in">
+    <div>
+      <span class="bh__k">Eventos</span>
+      <h1>Celebra con <em>sabor</em></h1>
+      <p class="lead">Cumpleaños, aniversarios, graduaciones o la reunión de la familia: cuéntanos qué quieres celebrar y te enviamos una propuesta a la medida.</p>
+      <div class="bh__links">
+        <a class="bh__chip" href="#plan"><span data-ic="party"></span>Solicitar evento</a>
+        <a class="bh__chip bh__chip--alt" href="../reservas/reservas.html"><span data-ic="calendar"></span>Solo quiero una mesa</a>
+      </div>
+    </div>
+    <ol class="evflow" aria-label="Cómo sigue tu solicitud">
+      <li><span class="st st--amber">Solicitud recibida</span></li>
+      <li><span class="st st--amber">En revisión</span></li>
+      <li><span class="st st--violet">Cotizada</span></li>
+      <li><span class="st st--green">Confirmada</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section bsec" data-jungle="light-b" data-hedge="light">
+  <div class="wrap">
+    <div class="bmine" id="mine" hidden></div>
+    <div class="boff" id="off" hidden></div>
+
+    <div class="bk" id="plan">
+      <form class="bk__main" id="eform" novalidate aria-label="Solicitud de evento">
+        <section class="bstep" aria-labelledby="e1">
+          <header class="bstep__h"><span class="bstep__n">1</span><div><h2 id="e1">¿Qué celebras?</h2><p>Elige el tipo de evento.</p></div></header>
+          <div class="evtypes" id="types" role="radiogroup" aria-labelledby="e1"></div>
+          <div class="field evtitle"><label for="e-title">Nombre del evento <span class="opt">(opcional)</span></label><input id="e-title" maxlength="100" placeholder="Ej.: Los 50 de mamá"></div>
+        </section>
+
+        <section class="bstep" aria-labelledby="e2">
+          <header class="bstep__h"><span class="bstep__n">2</span><div><h2 id="e2">¿Cuándo?</h2><p id="ev-min">Con al menos 3 días de anticipación.</p></div></header>
+          <div class="evwhen">
+            <div class="cal" id="cal"></div>
+            <div class="evtimes">
+              <div class="field"><label for="e-start">Hora de inicio</label><select id="e-start"></select></div>
+              <div class="field"><label for="e-end">Hora de fin</label><select id="e-end"></select></div>
+              <p class="evdur" id="e-dur"></p>
+            </div>
+          </div>
+          <p class="bnote" id="e-avail" hidden></p>
+        </section>
+
+        <section class="bstep" aria-labelledby="e3">
+          <header class="bstep__h"><span class="bstep__n">3</span><div><h2 id="e3">Invitados y espacio</h2><p id="ev-guests-l">Mínimo 10 invitados.</p></div></header>
+          <div class="party">
+            <button type="button" class="party__b" data-g="-5" aria-label="Cinco invitados menos"><span data-ic="minus"></span></button>
+            <label class="visually-hidden" for="e-guests">Invitados</label>
+            <input class="party__n evg" id="e-guests" type="number" inputmode="numeric" min="10" max="100" value="20">
+            <button type="button" class="party__b" data-g="5" aria-label="Cinco invitados más"><span data-ic="plus"></span></button>
+            <span class="party__l">invitados</span>
+          </div>
+          <div class="evspace" role="radiogroup" aria-label="Espacio">
+            <label class="evspace__o"><input type="radio" name="space" value="compartido" checked><span><b>Área reservada</b><small>Mesas juntas para tu grupo; el restaurante sigue abierto al público.</small></span></label>
+            <label class="evspace__o"><input type="radio" name="space" value="exclusivo"><span><b>Local exclusivo</b><small>Todo el restaurante para tu evento (sujeto a cotización).</small></span></label>
+          </div>
+        </section>
+
+        <section class="bstep" aria-labelledby="e4">
+          <header class="bstep__h"><span class="bstep__n">4</span><div><h2 id="e4">Detalles <span class="opt">(opcional)</span></h2><p>Mientras más nos cuentes, mejor será la propuesta.</p></div></header>
+          <div class="form-grid">
+            <div class="field"><label for="e-budget">Presupuesto aproximado</label>
+              <select id="e-budget"><option value="">Prefiero no decirlo</option><option>Menos de RD$15,000</option><option>RD$15,000 – 30,000</option><option>RD$30,000 – 60,000</option><option>RD$60,000 – 100,000</option><option>Más de RD$100,000</option></select></div>
+            <div class="field"><label for="e-food">Comida y bebida</label><input id="e-food" maxlength="500" placeholder="Ej.: caldos para todos, mariscos, bizcocho…"></div>
+            <div class="field field--full"><label for="e-deco">Decoración o montaje</label><input id="e-deco" maxlength="500" placeholder="Ej.: globos dorados, mesa para el bizcocho, música…"></div>
+            <div class="field field--full"><label for="e-notes">Peticiones especiales</label><textarea id="e-notes" maxlength="1500" rows="3" placeholder="Alergias, accesibilidad, sorpresa, horario de llegada de proveedores…"></textarea></div>
+          </div>
+        </section>
+
+        <section class="bstep" aria-labelledby="e5">
+          <header class="bstep__h"><span class="bstep__n">5</span><div><h2 id="e5">Tus datos</h2><p>Te enviaremos la cotización.</p></div></header>
+          <div class="form-grid">
+            <div class="field"><label for="e-name">Nombre</label><input id="e-name" autocomplete="name" maxlength="80" required><span class="error-msg" id="e-name-e"></span></div>
+            <div class="field"><label for="e-phone">Teléfono / WhatsApp</label><input id="e-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" required placeholder="809 555 1234"><span class="error-msg" id="e-phone-e"></span></div>
+          </div>
+        </section>
+
+        <div class="bsend">
+          <div class="bsend__err" id="e-error" role="alert" hidden></div>
+          <button class="btn bsend__btn" type="submit" id="e-send"><span class="spin" hidden></span><span id="e-send-t">Enviar solicitud de evento</span></button>
+          <p class="bsend__fine">Enviar la solicitud no te compromete a nada: primero recibirás la cotización.</p>
+        </div>
+      </form>
+
+      <aside class="bk__side" aria-label="Resumen">
+        <div class="bsum">
+          <h2>Tu evento</h2>
+          <dl class="bsum__dl">
+            <div><dt><span data-ic="party"></span>Tipo</dt><dd id="sum-type">Sin elegir</dd></div>
+            <div><dt><span data-ic="calendar"></span>Día</dt><dd id="sum-date">Sin elegir</dd></div>
+            <div><dt><span data-ic="clock"></span>Horario</dt><dd id="sum-time">Sin elegir</dd></div>
+            <div><dt><span data-ic="users"></span>Invitados</dt><dd id="sum-guests">20</dd></div>
+          </dl>
+        </div>
+        <details class="bpol" open>
+          <summary><span data-ic="shield"></span>Política de eventos</summary>
+          <ul id="policy"></ul>
+        </details>
+      </aside>
+    </div>
+
+    <div class="bdone" id="done" hidden></div>
+  </div>
+</section>
+</main>
+
+<div id="site-footer"></div>
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/auth-config.js"></script>
+<script src="../components/shared/menu-live.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/jungle.js"></script>
+<script src="../components/shared/auth.js"></script>
+<script src="../components/shared/booking.js"></script>
+<script src="../components/header/header.js"></script>
+<script src="../components/footer/footer.js"></script>
+<script src="eventos.js"></script>
+<script src="../components/shared/boot.js"></script>
+</body>
+</html>

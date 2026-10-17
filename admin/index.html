@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel Administrativo | Caldos Constitución</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#2E170E">
+<!-- Tema guardado (claro/oscuro) antes de pintar, para que no parpadee -->
+<script>try { var t = localStorage.getItem("cc_admin_theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+<link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap">
+<link rel="stylesheet" href="admin.css?v=20261017c">
+</head>
+<body class="ad">
+<noscript><p class="ad-nojs">El Panel Administrativo necesita JavaScript activado.</p></noscript>
+
+<!-- Pantalla de acceso -->
+<div class="gate" id="gate" hidden>
+  <div class="gate__theme" data-theme-slot></div>
+  <div class="gate__card">
+    <div class="gate__brand"><img src="../assets/logo/logo.png" alt="" width="64" height="59"><div><b>Caldos Constitución</b><span>Panel Administrativo</span></div></div>
+    <div id="gate-body"></div>
+  </div>
+  <p class="gate__foot"><a href="../inicio/inicio.html">← Volver al sitio</a></p>
+</div>
+
+<!-- Aplicación -->
+<div class="app" id="app" hidden>
+  <aside class="side" id="side" aria-label="Navegación del panel">
+    <div class="side__brand"><img src="../assets/logo/logo.png" alt="" width="40" height="37"><div><b>Caldos</b><span>Panel</span></div></div>
+    <nav class="side__nav" id="nav"></nav>
+    <div class="side__me" id="me"></div>
+  </aside>
+  <div class="side-scrim" id="side-scrim"></div>
+  <div class="main">
+    <header class="top">
+      <button class="top__menu" id="menu-btn" type="button" aria-label="Abrir navegación" aria-controls="side" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+      <h1 class="top__t" id="view-title">Resumen</h1>
+      <div class="top__acts" id="top-acts"></div>
+      <div class="top__end">
+        <span class="top__live" id="live" title="Conectado en tiempo real"><i></i><span>En vivo</span></span>
+        <span data-theme-slot></span>
+      </div>
+    </header>
+    <main class="view" id="view" tabindex="-1"></main>
+  </div>
+</div>
+
+<div class="boot" id="boot"><span class="boot__spin"></span><p>Cargando panel…</p></div>
+
+<script src="../components/shared/config.js"></script>
+<script src="../components/shared/data.js"></script>
+<script src="../components/shared/auth-config.js"></script>
+<script src="../components/shared/store.js"></script>
+<script src="../components/shared/ui.js"></script>
+<script src="../components/shared/booking.js"></script>
+<script src="../components/shared/orders.js?v=20261017c"></script>
+<script src="js/core.js?v=20261017c"></script>
+<script src="js/ops.js?v=20261017c"></script>
+<script src="js/gate.js?v=20261017c"></script>
+<script src="js/v-dashboard.js?v=20261017c"></script>
+<script src="js/v-reservations.js?v=20261017c"></script>
+<script src="js/v-events.js?v=20261017c"></script>
+<script src="js/v-orders.js?v=20261017c"></script>
+<script src="js/v-tables.js?v=20261017c"></script>
+<script src="js/v-menu.js?v=20261017c"></script>
+<script src="js/v-people.js?v=20261017c"></script>
+<script src="js/v-reports.js?v=20261017c"></script>
+<script src="js/v-settings.js?v=20261017c"></script>
+<script src="js/v-system.js?v=20261017c"></script>
+<script src="js/v-payments.js?v=20261017c"></script>
+<script src="js/start.js?v=20261017c"></script>
+</body>
+</html>

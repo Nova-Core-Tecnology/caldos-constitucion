@@ -4,62 +4,213 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reservar mesa | Caldos Constitución And Restaurant</title>
-<meta name="description" content="Solicita tu reserva en Caldos Constitución And Restaurant. Indica fecha, hora y número de personas; el restaurante la confirmará por WhatsApp.">
-<meta name="theme-color" content="#FFF8F0">
+<meta name="description" content="Reserva tu mesa en Caldos Constitución And Restaurant: elige el día, la hora y las personas con disponibilidad real, y añade los platos que te apetecen.">
+<meta name="theme-color" content="#2E170E">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_DO">
 <meta property="og:site_name" content="Caldos Constitución And Restaurant">
 <meta property="og:title" content="Reservar mesa | Caldos Constitución And Restaurant">
-<meta property="og:description" content="Solicita tu reserva en Caldos Constitución And Restaurant. Indica fecha, hora y número de personas; el restaurante la confirmará por WhatsApp.">
-<meta property="og:image" content="../assets/logo/logo.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="Reserva tu mesa con disponibilidad real: día, hora, personas y los platos que te apetecen.">
+<meta property="og:image" content="../assets/images/gallery/salon-principal.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="../assets/icons/favicon-192.png">
 <link rel="apple-touch-icon" href="../assets/icons/favicon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&amp;family=Nunito+Sans:wght@400;600;700;800&amp;family=Baloo+2:wght@600;700;800&amp;display=swap">
+<link rel="preload" as="image" href="../assets/images/gallery/salon-principal.jpg">
 <link rel="stylesheet" href="../components/shared/base.css">
 <link rel="stylesheet" href="../components/header/header.css">
 <link rel="stylesheet" href="../components/footer/footer.css">
 <link rel="stylesheet" href="../components/shared/botanical.css">
 <link rel="stylesheet" href="../components/shared/jungle.css">
-<link rel="stylesheet" href="reservas.css">
+<link rel="stylesheet" href="../components/shared/auth.css">
+<link rel="stylesheet" href="../components/shared/booking.css">
+<link rel="stylesheet" href="reservas.css?v=20261017">
 </head>
 <body data-page="reservas">
 <a class="skip-link" href="#main">Saltar al contenido</a>
 <div id="site-header"></div>
-<main id="main">
-<section class="page-hero" data-jungle="page"><div class="wrap"><span class="eyebrow" style="color:var(--gold)">Reservas</span><h1>Reserva tu mesa</h1>
-<p class="lead">Completa la solicitud y envíala por WhatsApp. La reserva queda confirmada cuando el restaurante te responda.</p></div></section>
+<main id="main" class="rv">
 
-<section class="section" data-jungle="light-a" data-hedge="light"><div class="wrap narrow">
-  <form class="card-form" id="rform" novalidate aria-labelledby="rt">
-    <h2 id="rt" class="visually-hidden">Formulario de solicitud de reserva</h2>
-    <div class="form-grid">
-      <div class="field"><label for="r-name">Nombre del cliente</label><input id="r-name" autocomplete="name" required><span class="error-msg" id="r-name-e"></span></div>
-      <div class="field"><label for="r-via">Medio de contacto</label><select id="r-via"><option value="WhatsApp">WhatsApp</option><option value="Teléfono">Llamada telefónica</option><option value="Correo">Correo electrónico</option></select></div>
-      <div class="field field--full"><label for="r-contact" id="r-contact-l">Número de WhatsApp</label><input id="r-contact" required autocomplete="tel" inputmode="tel"><span class="error-msg" id="r-contact-e"></span></div>
-      <div class="field"><label for="r-date">Fecha</label><input id="r-date" type="date" required><span class="error-msg" id="r-date-e"></span></div>
-      <div class="field"><label for="r-time">Hora</label><input id="r-time" type="time" required><span class="error-msg" id="r-time-e"></span></div>
-      <div class="field"><label for="r-people">Número de personas</label><input id="r-people" type="number" min="1" max="30" value="2" inputmode="numeric" required><span class="error-msg" id="r-people-e"></span></div>
-      <div class="field field--full"><label for="r-notes">Solicitudes especiales <span class="opt">(opcional)</span></label><textarea id="r-notes" maxlength="400"></textarea></div>
+<!-- Portada -->
+<section class="rv-hero">
+  <div class="rv-hero__bg" aria-hidden="true"></div>
+  <div class="wrap rv-hero__in">
+    <span class="rv-hero__k">Reservaciones en línea</span>
+    <h1>Reserva tu mesa <em>en minutos</em></h1>
+    <p class="rv-hero__lead">Disponibilidad real de mesas, sin llamadas. Elige día, hora y personas; el restaurante confirma tu reservación y te avisa en «Mi cuenta».</p>
+    <ul class="rv-hero__info">
+      <li><span data-ic="clock" aria-hidden="true"></span><span id="hours-l">Abrimos todos los días</span></li>
+      <li><span data-ic="pin" aria-hidden="true"></span><span>San Cristóbal, República Dominicana</span></li>
+      <li><span data-ic="shield" aria-hidden="true"></span><span>Sin pagos por adelantado</span></li>
+    </ul>
+    <a class="rv-hero__ev" href="../eventos/eventos.html"><span data-ic="star" aria-hidden="true"></span>¿Grupo grande o celebración? Solicita un evento<span data-ic="right" aria-hidden="true"></span></a>
+  </div>
+</section>
+
+<section class="rv-body">
+  <div class="wrap">
+    <div class="bmine rv-mine" id="mine" hidden></div>
+    <div class="boff rv-off" id="off" hidden></div>
+
+    <div class="rv-grid" id="plan">
+      <div class="rv-main">
+        <!-- Progreso -->
+        <nav class="rv-prog" aria-label="Pasos de la reservación">
+          <ol>
+            <li><button type="button" data-go="1" aria-current="step"><b>1</b><span>Mesa</span></button></li>
+            <li><button type="button" data-go="2"><b>2</b><span>Platos</span></button></li>
+            <li><button type="button" data-go="3"><b>3</b><span>Tus datos</span></button></li>
+            <li><button type="button" data-go="4"><b>4</b><span>Confirmar</span></button></li>
+          </ol>
+          <div class="rv-prog__bar" aria-hidden="true"><i id="prog-bar"></i></div>
+        </nav>
+
+        <form class="rv-card" id="rform" novalidate aria-label="Solicitud de reservación">
+          <!-- Paso 1: personas, día y hora -->
+          <section class="rv-step" data-step="1" aria-labelledby="t1">
+            <header class="rv-step__h"><h2 id="t1">Elige tu mesa</h2><p>Personas, día y hora. Solo verás horarios con mesa libre para tu grupo.</p></header>
+
+            <div class="rv-block">
+              <h3 class="rv-lbl"><span data-ic="users" aria-hidden="true"></span>¿Cuántos son?</h3>
+              <div class="rv-party">
+                <div class="rv-pp" id="pp" role="group" aria-label="Elegir número de personas"></div>
+                <div class="party rv-stepper">
+                  <button type="button" class="party__b" data-party="-1" aria-label="Una persona menos"><span data-ic="minus"></span></button>
+                  <output class="party__n" id="party" aria-live="polite">2</output>
+                  <button type="button" class="party__b" data-party="1" aria-label="Una persona más"><span data-ic="plus"></span></button>
+                  <span class="party__l" id="party-l">personas</span>
+                </div>
+              </div>
+              <p class="bnote" id="party-note" hidden></p>
+            </div>
+
+            <div class="rv-two">
+              <div class="rv-block">
+                <h3 class="rv-lbl"><span data-ic="calendar" aria-hidden="true"></span>¿Qué día?</h3>
+                <div class="cal rv-cal" id="cal"></div>
+              </div>
+              <div class="rv-block">
+                <h3 class="rv-lbl"><span data-ic="clock" aria-hidden="true"></span>¿A qué hora?</h3>
+                <p class="rv-sub" id="day-l">Elige un día para ver los horarios.</p>
+                <div class="slots rv-slots" id="slots" role="radiogroup" aria-label="Horarios disponibles"></div>
+                <ul class="legend rv-legend" aria-label="Leyenda"><li><i class="ok"></i>Disponible</li><li><i class="few"></i>Pocas mesas</li><li><i class="full"></i>Completo</li></ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Paso 2: platos -->
+          <section class="rv-step" data-step="2" aria-labelledby="t2" hidden>
+            <header class="rv-step__h"><h2 id="t2">Platos para tu mesa <span class="rv-opt">Opcional</span></h2><p>La cocina los tendrá en cuenta para tu llegada. No es un pedido ni un pago: confirmas y pagas en el restaurante.</p></header>
+            <ul class="dsel rv-dsel" id="dsel"></ul>
+            <div class="rv-dempty" id="dempty">
+              <span data-ic="utensils" aria-hidden="true"></span>
+              <b>Aún no has elegido platos</b>
+              <p>Puedes saltar este paso o adelantarnos lo que te apetece.</p>
+            </div>
+            <div class="dsel__acts rv-dacts">
+              <button type="button" class="btn btn--sm" id="add-dish"><span data-ic="plus"></span>Elegir del menú</button>
+              <button type="button" class="btn btn--sm btn--outline" id="from-cart" hidden><span data-ic="cart"></span><span id="from-cart-t">Traer mi carrito</span></button>
+            </div>
+          </section>
+
+          <!-- Paso 3: datos -->
+          <section class="rv-step" data-step="3" aria-labelledby="t3" hidden>
+            <header class="rv-step__h"><h2 id="t3">Tus datos</h2><p>Para confirmarte la reservación. Usamos tu teléfono solo para esta reservación.</p></header>
+            <div class="form-grid rv-form">
+              <div class="field"><label for="r-name">Nombre completo</label><input id="r-name" autocomplete="name" maxlength="80" required><span class="error-msg" id="r-name-e"></span></div>
+              <div class="field"><label for="r-phone">Teléfono / WhatsApp</label><input id="r-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" required placeholder="809 555 1234"><span class="error-msg" id="r-phone-e"></span></div>
+              <div class="field field--full">
+                <span class="rv-flbl" id="occ-l">¿Celebran algo? <span class="opt">(opcional)</span></span>
+                <div class="rv-occ" id="occ" role="group" aria-labelledby="occ-l"></div>
+                <select id="r-occ" hidden aria-hidden="true" tabindex="-1"><option value="">Ninguna en especial</option><option>Cumpleaños</option><option>Aniversario</option><option>Reunión familiar</option><option>Negocios</option><option>Cita</option><option>Otra</option></select>
+              </div>
+              <div class="field field--full"><label for="r-notes">Comentarios <span class="opt">(opcional)</span></label><textarea id="r-notes" maxlength="500" rows="3" placeholder="Silla para bebé, alergias, mesa en la terraza…"></textarea></div>
+            </div>
+          </section>
+
+          <!-- Paso 4: revisar y confirmar -->
+          <section class="rv-step" data-step="4" aria-labelledby="t4" hidden>
+            <header class="rv-step__h"><h2 id="t4">Revisa y confirma</h2><p>Comprueba que todo esté bien antes de enviar.</p></header>
+            <div class="rv-review" id="review"></div>
+            <div class="rv-pol"><h3><span data-ic="shield" aria-hidden="true"></span>Política de reservaciones</h3><ul id="policy2"></ul></div>
+          </section>
+
+          <!-- Navegación -->
+          <div class="rv-nav">
+            <div class="bsend__err rv-err" id="r-error" role="alert" hidden></div>
+            <div class="rv-nav__row">
+              <button type="button" class="btn btn--outline rv-back" id="r-back" hidden><span data-ic="left"></span>Atrás</button>
+              <p class="rv-mini" id="mini" aria-live="polite"></p>
+              <button class="btn rv-next" type="submit" id="r-send"><span class="spin" hidden></span><span id="r-send-t">Continuar</span><span data-ic="right" class="rv-next__ic"></span></button>
+            </div>
+            <p class="bsend__fine rv-fine" id="fine" hidden>Al confirmar aceptas la política de reservaciones. Recibirás la confirmación en «Mi cuenta».</p>
+          </div>
+        </form>
+      </div>
+
+      <!-- Resumen tipo ticket -->
+      <aside class="rv-side" aria-label="Resumen de tu reservación">
+        <div class="rv-ticket">
+          <div class="rv-ticket__img"><img src="../assets/images/gallery/salon-principal.jpg" alt="" width="720" height="400"><span>Caldos Constitución</span></div>
+          <div class="rv-ticket__b">
+            <h2>Tu reservación</h2>
+            <dl class="rv-ticket__dl">
+              <div><dt><span data-ic="users"></span>Personas</dt><dd id="sum-party">2</dd></div>
+              <div><dt><span data-ic="calendar"></span>Día</dt><dd id="sum-date">Sin elegir</dd></div>
+              <div><dt><span data-ic="clock"></span>Hora</dt><dd id="sum-time">Sin elegir</dd></div>
+              <div><dt><span data-ic="utensils"></span>Platos</dt><dd id="sum-dish">Ninguno</dd></div>
+            </dl>
+            <p class="bsum__table rv-ticket__ok" id="sum-table" hidden></p>
+          </div>
+          <div class="rv-ticket__cut" aria-hidden="true"></div>
+          <details class="bpol rv-ticket__pol" open>
+            <summary><span data-ic="shield"></span>Política de reservaciones</summary>
+            <ul id="policy"></ul>
+          </details>
+        </div>
+        <ul class="rv-trust">
+          <li><span data-ic="check"></span>Disponibilidad real en tiempo real</li>
+          <li><span data-ic="bell"></span>Te avisamos cuando se confirme</li>
+          <li><span data-ic="chat"></span>¿Dudas? Escríbenos por WhatsApp</li>
+        </ul>
+      </aside>
     </div>
-    <div class="notice" style="margin:1.2rem 0"><strong>Importante</strong>Esta página no verifica disponibilidad. Preparamos tu solicitud y la envías por WhatsApp; la reserva solo es válida cuando el restaurante la acepte.</div>
-    <button class="btn" type="submit" id="r-send"><span class="spin" hidden></span><span id="r-send-t">Preparar solicitud</span></button>
-  </form>
-  <div id="r-result" role="status" aria-live="polite" style="margin-top:1.4rem"></div>
-</div></section>
+
+    <div class="bdone rv-done" id="done" hidden></div>
+  </div>
+</section>
 </main>
+
+<!-- Selector de platos -->
+<dialog class="dpick" id="dpick" aria-labelledby="dpick-t">
+  <div class="dpick__head">
+    <h2 id="dpick-t">Añadir platos</h2>
+    <button type="button" class="dpick__x" data-close aria-label="Cerrar"><span data-ic="close"></span></button>
+  </div>
+  <div class="dpick__tools">
+    <label class="visually-hidden" for="dpick-q">Buscar plato</label>
+    <input id="dpick-q" type="search" placeholder="Buscar plato…" autocomplete="off">
+    <div class="dpick__cats" id="dpick-cats"></div>
+  </div>
+  <ul class="dpick__list" id="dpick-list"></ul>
+  <div class="dpick__foot"><button type="button" class="btn" data-close>Listo</button></div>
+</dialog>
+
 <div id="site-footer"></div>
 <script src="../components/shared/config.js"></script>
 <script src="../components/shared/data.js"></script>
+<script src="../components/shared/auth-config.js"></script>
+<script src="../components/shared/menu-live.js"></script>
 <script src="../components/shared/store.js"></script>
 <script src="../components/shared/ui.js"></script>
 <script src="../components/shared/jungle.js"></script>
+<script src="../components/shared/auth.js"></script>
+<script src="../components/shared/booking.js"></script>
 <script src="../components/header/header.js"></script>
 <script src="../components/footer/footer.js"></script>
-<script src="../components/shared/botanical-art.js"></script>
-<script src="reservas.js"></script>
+<script src="reservas.js?v=20261017"></script>
 <script src="../components/shared/boot.js"></script>
 </body>
 </html>

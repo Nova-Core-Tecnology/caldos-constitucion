@@ -70,7 +70,11 @@
       out.push("", "Por favor confirmen disponibilidad, precio final y entrega. ¡Gracias!");
       return out.join("\n");
     }
-    function updateLinks() { var href = CC.waLink(orderText()); $("wa").href = href; $("wa2").href = href; }
+    function updateLinks() {
+      $("wa").href = CC.waLink(orderText());
+      /* reparto del pago según la modalidad: 100 % para recoger, 50 % a domicilio o para comer aquí */
+      if (CC.orders) { var sp = CC.orders.split(CC.store.total(), mode()); $("r-split").innerHTML = "Pagas ahora <b>" + CC.money(sp.now) + "</b>" + (sp.later ? " · " + (mode() === "mesa" ? "en el local" : "al recibir") + " " + CC.money(sp.later) : " (100 %)"); }
+    }
 
     /* ---------- líneas ---------- */
     function lineHTML(it, q) {
@@ -304,6 +308,17 @@
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(copyFallback(text)); });
       else done(copyFallback(text));
     });
+
+    /* ---------- cuenta: datos rellenos y el pedido queda en el historial ---------- */
+    function prefill() {
+      var u = CC.auth && CC.auth.user(); if (!u) return;
+      var p = CC.auth.profile(), changed = false;
+      if (!nameIn.value && u.name) { nameIn.value = u.name; changed = true; }
+      if (!addrIn.value && p.address) { addrIn.value = p.address; changed = true; }
+      if (changed) onDetail();
+    }
+    if (CC.auth) CC.auth.onChange(prefill);
+    prefill();
 
     counter(); paintDetails();
     CC.store.onChange(render); render();

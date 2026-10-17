@@ -30,11 +30,43 @@
     pot: '<path d="M4 10h16v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h2M20 10h2M9 6c0-1.5 1.5-1.5 1.5-3M14 6c0-1.5 1.5-1.5 1.5-3"/>',
     star: '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z" fill="currentColor"/>',
     left: '<path d="M15 5l-7 7 7 7"/>',
-    right: '<path d="M9 5l7 7-7 7"/>'
+    right: '<path d="M9 5l7 7-7 7"/>',
+    bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+    edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+    alert: '<path d="M12 3.5L2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.3"/>',
+    search: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
+    download: '<path d="M12 4v11M7 10.5l5 5 5-5M4 20h16"/>',
+    upload: '<path d="M12 16V5M7 9.5l5-5 5 5M4 20h16"/>',
+    chart: '<path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/>',
+    table: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 10v9M15 10v9"/>',
+    settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+    logout: '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/>',
+    lock: '<rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>',
+    refresh: '<path d="M20 11a8 8 0 0 0-14.6-4.5L4 8M4 4v4h4M4 13a8 8 0 0 0 14.6 4.5L20 16M20 20v-4h-4"/>',
+    filter: '<path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/>',
+    eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',
+    party: '<path d="M4 20l5-13 8 8z"/><path d="M14 4c.5 1.5 0 3-1.5 3.5M19 8c-1.5 0-2.5 1-2.5 2.5M17 3l.5 1.5M21 5l-1.5.5"/>'
   };
   CC.icon = function (name, label) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ' +
       (label ? 'role="img" aria-label="' + label + '"' : 'aria-hidden="true" focusable="false"') + '>' + (ICONS[name] || "") + '</svg>';
+  };
+  /* Pinta los íconos declarados en el HTML con data-ic="nombre" */
+  CC.icons = function (root) {
+    (root || document).querySelectorAll("[data-ic]:empty").forEach(function (el) { el.innerHTML = CC.icon(el.getAttribute("data-ic")); });
+  };
+  /* Registra un error sin datos sensibles (colección errorLog, visible en el panel). Nunca rompe la página. */
+  CC.logError = function (where, e) {
+    try {
+      if (!CC.auth || !CC.auth.configured) return;
+      var code = String((e && (e.code || e.name)) || "").slice(0, 80), msg = String((e && e.message) || e || "").replace(/\S+@\S+/g, "[correo]").slice(0, 500);
+      CC.auth.fire().then(function (f) {
+        var u = f.auth.currentUser;
+        return f.db.collection("errorLog").add({ at: f.fb.firestore.FieldValue.serverTimestamp(), where: String(where).slice(0, 80), code: code, message: msg, page: location.pathname.slice(-200), uid: u ? u.uid : "" });
+      }).catch(function () {});
+    } catch (x) {}
   };
   CC.esc = function (s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -46,7 +78,12 @@
     // Todas las páginas viven a un nivel de profundidad (carpeta/pagina.html)
     return "../";
   })();
-  CC.imgSrc = function (file) { return CC.base + "assets/images/menu/" + encodeURIComponent(file); };
+  /* Se sirve la versión ligera .webp (máx. 1000 px) generada a partir de la foto original con el mismo nombre */
+  CC.imgSrc = function (file) {
+    /* Foto subida desde el Panel Administrativo (guardada en la base de datos) */
+    if (/^fs:/.test(file || "") && CC.photoSrc) return CC.photoSrc(file);
+    return CC.base + "assets/images/menu/" + encodeURIComponent(String(file || "").replace(/\.(jpe?g|png|jfif)$/i, ".webp"));
+  };
 
   CC.toast = function (msg, type) {
     var host = document.getElementById("toast-host");
@@ -109,6 +146,7 @@
   /* Zona de compra de la tarjeta: botón "Añadir" o selector de cantidad si ya está en el carrito */
   function buyHTML(it) {
     var q = CC.store.qty(it.id), n = CC.esc(it.name);
+    if (it.soldOut) return '<span class="btn btn--sm btn--sold" aria-label="' + n + ' está agotado por hoy">Agotado</span>';
     if (q > 0) {
       return '<div class="stepper" role="group" aria-label="Cantidad de ' + n + ' en el carrito">' +
         '<button type="button" data-action="dec" aria-label="Quitar una unidad de ' + n + '">' + CC.icon("minus") + "</button>" +
@@ -131,7 +169,7 @@
   CC.dishCard = function (it) {
     var fav = CC.store.isFav(it.id), q = CC.store.qty(it.id), n = CC.esc(it.name);
     var price = it.priceNote ? '<span class="price"><small>desde</small>' + CC.money(it.price) + "</span>" : '<span class="price">' + CC.money(it.price) + "</span>";
-    return '<article class="dish reveal' + (q > 0 ? " in-cart" : "") + '" data-id="' + it.id + '" style="--kr:' + rgb(it.category) + '">' +
+    return '<article class="dish reveal' + (q > 0 ? " in-cart" : "") + (it.soldOut ? " is-sold" : "") + '" data-id="' + it.id + '" style="--kr:' + rgb(it.category) + '">' +
       '<div class="dish__top">' +
       '<button class="dish__media" type="button" data-action="details" aria-label="Ver detalles de ' + n + '">' +
       '<img class="dish__img" src="' + CC.imgSrc(it.image) + '" alt="' + n + '" loading="lazy" decoding="async" data-fallback></button>' +
@@ -155,6 +193,8 @@
       if (a === "fav") {
         var on = CC.store.toggleFav(id);
         CC.toast(on ? it.name + " añadido a favoritos" : it.name + " quitado de favoritos");
+      } else if ((a === "add" || a === "inc") && it.soldOut) {
+        CC.toast(it.name + " está agotado por hoy.", "error");
       } else if (a === "add" || a === "inc") {
         CC.flyToCart(btn); CC.store.add(id, 1);
         CC.toast(it.name + " añadido · " + CC.store.qty(id) + " en tu carrito");

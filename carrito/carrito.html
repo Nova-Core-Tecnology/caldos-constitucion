@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="../components/footer/footer.css">
 <link rel="stylesheet" href="../components/shared/botanical.css">
 <link rel="stylesheet" href="../components/shared/jungle.css">
+<link rel="stylesheet" href="../components/shared/auth.css">
 <link rel="stylesheet" href="carrito.css">
 </head>
 <body data-page="carrito">
@@ -36,14 +37,14 @@
     <div class="kh__tx">
       <span class="kh__k">Tu pedido</span>
       <h1>Tu mesa, <em>lista para pedir</em></h1>
-      <p class="lead">Ajusta cantidades, dinos cómo lo quieres y envíalo por WhatsApp. El restaurante lo confirma contigo.</p>
+      <p class="lead">Ajusta cantidades, dinos cómo lo quieres y paga en línea. El restaurante verifica el pago y prepara tu pedido.</p>
       <p class="kh__sum" id="kh-sum" hidden></p>
     </div>
     <ol class="flow" id="flow" aria-label="Pasos del pedido">
       <li class="flow__i" data-step="1"><span class="flow__n"><span data-ic="utensils"></span></span><span class="flow__t"><b>Elige tus platos</b><small>Desde el menú o tus favoritos</small></span></li>
       <li class="flow__i" data-step="2"><span class="flow__n"><span data-ic="check"></span></span><span class="flow__t"><b>Revisa y personaliza</b><small>Cantidades, modalidad y nota</small></span></li>
-      <li class="flow__i" data-step="3"><span class="flow__n"><span data-ic="chat"></span></span><span class="flow__t"><b>Envía por WhatsApp</b><small>Con el mensaje ya escrito</small></span></li>
-      <li class="flow__i" data-step="4"><span class="flow__n"><span data-ic="shield"></span></span><span class="flow__t"><b>El restaurante confirma</b><small>Disponibilidad y precio final</small></span></li>
+      <li class="flow__i" data-step="3"><span class="flow__n"><span data-ic="shield"></span></span><span class="flow__t"><b>Paga en línea</b><small>100 % para recoger · 50 % a domicilio</small></span></li>
+      <li class="flow__i" data-step="4"><span class="flow__n"><span data-ic="check"></span></span><span class="flow__t"><b>El restaurante confirma</b><small>Verifica el pago y lo prepara</small></span></li>
     </ol>
   </div>
 </section>
@@ -108,8 +109,10 @@
               <div class="big"><dt>Total estimado</dt><dd id="s-total">RD$0</dd></div>
             </dl>
             <p class="receipt__hint" id="s-hint" hidden>Incluye platos con precio «desde». El precio final lo confirma el restaurante.</p>
-            <a class="btn btn--block receipt__wa" id="wa" target="_blank" rel="noopener noreferrer"><span data-ic="chat" aria-hidden="true"></span>Enviar pedido por WhatsApp<span class="visually-hidden"> (se abre en una pestaña nueva)</span></a>
-            <p class="receipt__note"><b>Sin pagos en línea.</b> Este sitio no cobra ni confirma pedidos: el restaurante te responde por WhatsApp con disponibilidad, precio final y entrega.</p>
+            <a class="btn btn--block receipt__wa" id="pay" href="../pagar/pagar.html"><span data-ic="shield" aria-hidden="true"></span>Pagar y hacer pedido</a>
+            <p class="receipt__split" id="r-split"></p>
+            <a class="receipt__alt" id="wa" target="_blank" rel="noopener noreferrer"><span data-ic="chat" aria-hidden="true"></span>¿Dudas? Consulta tu pedido por WhatsApp<span class="visually-hidden"> (se abre en una pestaña nueva)</span></a>
+            <p class="receipt__note"><b>Pago seguro por transferencia o PayPal.</b> Para recoger pagas el 100 %; a domicilio o para comer aquí, el 50 % ahora y el resto al recibir.</p>
             <div class="receipt__tools">
               <button type="button" id="copy"><span data-ic="check" aria-hidden="true"></span>Copiar pedido</button>
               <button type="button" class="is-danger" id="clear"><span data-ic="trash" aria-hidden="true"></span>Vaciar</button>
@@ -147,7 +150,7 @@
 
 <div class="mbar" id="mbar">
   <div class="mbar__t"><span id="m-count">0 platos</span><strong id="m-total">RD$0</strong></div>
-  <a class="btn" id="wa2" target="_blank" rel="noopener noreferrer"><span data-ic="chat" aria-hidden="true"></span>Enviar pedido<span class="visually-hidden"> por WhatsApp (se abre en una pestaña nueva)</span></a>
+  <a class="btn" id="pay2" href="../pagar/pagar.html"><span data-ic="shield" aria-hidden="true"></span>Pagar pedido</a>
 </div>
 
 <div class="undo" id="undo" role="status" aria-live="polite" hidden>
@@ -170,13 +173,16 @@
 <div id="site-footer"></div>
 <script src="../components/shared/config.js"></script>
 <script src="../components/shared/data.js"></script>
+<script src="../components/shared/auth-config.js"></script>
+<script src="../components/shared/menu-live.js"></script>
 <script src="../components/shared/store.js"></script>
 <script src="../components/shared/ui.js"></script>
 <script src="../components/shared/jungle.js"></script>
+<script src="../components/shared/auth.js"></script>
 <script src="../components/header/header.js"></script>
 <script src="../components/footer/footer.js"></script>
-<script src="../components/shared/botanical-art.js"></script>
-<script src="carrito.js"></script>
+<script src="../components/shared/orders.js?v=20261017"></script>
+<script src="carrito.js?v=20261017"></script>
 <script src="../components/shared/boot.js"></script>
 </body>
 </html>

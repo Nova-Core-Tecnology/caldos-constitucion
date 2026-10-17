@@ -72,9 +72,10 @@
 .cf__topics { margin: 0 0 1.3rem; padding: 0; border: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
 .cf__topics legend { width: 100%; margin-bottom: .6rem; padding: 0; color: var(--brown); font-weight: 800; font-size: .9rem; }
 .cf__topics .opt, .field .opt { font-weight: 600; color: var(--ink-soft); }
+.cf__topics legend .opt { display: inline; min-height: 0; padding: 0; border: 0; background: none; font-size: .9rem; }
 .cf__topics label { position: relative; cursor: pointer; }
 .cf__topics input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
-.cf__topics span { display: inline-flex; align-items: center; min-height: 42px; padding: .4rem 1.1rem; border-radius: 999px; border: 1.5px solid var(--line); background: var(--cream-white); color: var(--brown); font: 700 .9rem var(--font-body); transition: background .2s, color .2s, border-color .2s, transform .2s; }
+.cf__topics label span { display: inline-flex; align-items: center; min-height: 42px; padding: .4rem 1.1rem; border-radius: 999px; border: 1.5px solid var(--line); background: var(--cream-white); color: var(--brown); font: 700 .9rem var(--font-body); transition: background .2s, color .2s, border-color .2s, transform .2s; }
 .cf__topics label:hover span { border-color: var(--orange); transform: translateY(-2px); }
 .cf__topics input:checked + span { background: var(--brown); border-color: var(--brown); color: var(--gold); }
 .cf__topics input:focus-visible + span { outline: 3px solid var(--orange); outline-offset: 2px; }
@@ -129,5 +130,11 @@
 @media (prefers-reduced-motion: reduce) {
   .ch__eyebrow, .ch .lead, .ch__cta, .ch__visual, .vcard, .ch h1 .line > span, .ch h1 .line > em { animation: none; }
   .vcard { transform: rotate(-4deg); }
-  .cc, .cc__ic, .cf__topics span { transition: none; }
+  .cc, .cc__ic, .cf__topics label span { transition: none; }
 }
+
+/* Móvil: el sello de la tarjeta de visita no se sale de la pantalla */
+@media (max-width: 600px) { .vcard__stamp { right: 6px; bottom: -22px; width: 72px; height: 72px; font-size: .6rem; } }
+
+/* Tablet: las cuatro tarjetas de contacto en 2 × 2 (no 3 + 1) */
+@media (min-width: 421px) and (max-width: 1100px) { .cc-grid { grid-template-columns: 1fr 1fr; } }

@@ -1,0 +1,388 @@
+rules_version = '2';
+
+// ============================================================================================
+// Reglas de seguridad de Caldos Constitución (Firestore)
+// Se evalúan en los servidores de Google en cada lectura y escritura: nadie puede saltárselas
+// desde el navegador. Son la "API segura" del sistema en el plan gratuito (sin Cloud Functions).
+//
+// Roles
+//   - Cliente: cualquier usuario con sesión. Solo ve y gestiona SUS reservaciones, eventos y avisos.
+//   - Equipo (admins/{uid}): permisos por módulo. role: "owner" | "admin" | "reception" | "kitchen"
+//     ("staff" = recepcionista antiguo). El propietario crea y gestiona a todos; el administrador
+//     solo crea y gestiona recepcionistas y cocina, y siempre con los permisos fijos de su rol.
+//   - Propietario (role "owner"): todos los permisos. Se reclama UNA sola vez con correo verificado
+//     + código de configuración secreto (system/bootstrap, creado desde la consola de Firebase).
+//     Nadie puede crear otro propietario ni quitarle privilegios desde la web.
+//
+// Colecciones públicas (sin datos personales): settings, tables, locks, cap, menu, menuPhotos.
+// Pedidos con pago (orders, orderProofs): sin servidor, todo pago llega «por verificar» y lo confirma el equipo.
+// ============================================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- utilidades ----------
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+    function doc(path) { return get(/databases/$(database)/documents/$(path)); }
+    function adminPath() { return /databases/$(database)/documents/admins/$(request.auth.uid); }
+    function isStaff() {
+      return signedIn() && exists(adminPath()) && get(adminPath()).data.active == true;
+    }
+    function isOwnerRole() { return isStaff() && get(adminPath()).data.role == 'owner'; }
+    function isAdminRole() { return isStaff() && get(adminPath()).data.role == 'admin'; }
+    // Permisos fijos de los roles que puede asignar un administrador (los mismos que usa el panel)
+    function rolePerms(role) {
+      return role == 'reception'
+        ? { 'reservations': true, 'events': true, 'tables': true, 'menu': false, 'menuStock': false, 'orders': false, 'kitchen': false, 'customers': true, 'reports': false, 'settings': false, 'audit': false }
+        : { 'reservations': false, 'events': false, 'tables': false, 'menu': false, 'menuStock': true, 'orders': false, 'kitchen': true, 'customers': false, 'reports': false, 'settings': false, 'audit': false };
+    }
+    function can(perm) {
+      return isStaff() && (get(adminPath()).data.role == 'owner' || get(adminPath()).data.perms[perm] == true);
+    }
+    function cfg() { return get(/databases/$(database)/documents/settings/restaurant).data; }
+    function nowMs() { return request.time.toMillis(); }
+    function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+    function str(v, min, max) { return v is string && v.size() >= min && v.size() <= max; }
+    function verifiedEmail() {
+      return request.auth.token.email != null && request.auth.token.email_verified == true;
+    }
+    function myEmail() { return request.auth.token.email.lower(); }
+
+    // La hora local de inicio (start, en ms) coincide con la fecha y hora escritas, y el día está abierto
+    function startMatches(start, date, time) {
+      let t = timestamp.value(start + cfg().tzOffsetMin * 60000);
+      let p = date.split('-');
+      let h = time.split(':');
+      return t.year() == int(p[0]) && t.month() == int(p[1]) && t.day() == int(p[2])
+        && t.hours() == int(h[0]) && t.minutes() == int(h[1])
+        && t.dayOfWeek() in cfg().openDays;
+    }
+    function dishesOk(list) { return list is list && list.size() <= 40; }
+
+    // ---------- configuración del restaurante y mesas (lectura pública) ----------
+    match /settings/{id} {
+      allow read: if true;
+      // settings/payments (cuentas de cobro) solo la cambia el propietario
+      allow write: if (id != 'payments' && can('settings')) || (id == 'payments' && isOwnerRole());
+    }
+    match /tables/{id} {
+      allow read: if true;
+      allow write: if can('tables');
+    }
+    // Bloqueos mesa-horario (uno por mesa y franja): crear uno que ya existe falla, así una mesa
+    // nunca queda asignada a dos reservaciones en el mismo horario. Sin datos personales.
+    match /locks/{id} {
+      allow read: if true;
+      allow write: if can('reservations') || can('events') || can('tables');
+    }
+    // Personas ocupadas por franja (para no superar la capacidad del local). Sin datos personales.
+    match /cap/{id} {
+      allow read: if true;
+      allow write: if can('reservations') || can('events') || can('tables');
+    }
+    match /blocks/{id} {
+      allow read: if isStaff();
+      allow write: if can('tables');
+    }
+
+    // ---------- menú (lectura pública, edición desde el panel) ----------
+    match /menu/{id} {
+      allow read: if true;
+      allow write: if can('menu');
+      // Encargado de cocina: solo marca platos agotados o disponibles (no precios ni contenido)
+      allow update: if can('menuStock') && changed().hasOnly(['soldOut', 'updatedAt', 'updatedBy']) && request.resource.data.soldOut is bool;
+    }
+    match /menuPhotos/{id} {
+      allow read: if true;
+      allow write: if can('menu') && request.resource.data.data is string && request.resource.data.data.size() < 900000;
+      allow delete: if can('menu');
+    }
+
+    // ---------- reservaciones de mesas ----------
+    function newReservationOk() {
+      let d = request.resource.data;
+      let c = cfg();
+      return signedIn() && d.uid == me()
+        && d.keys().hasAll(['uid', 'name', 'phone', 'date', 'time', 'start', 'party', 'status', 'tableIds', 'dishes', 'createdAt', 'updatedAt'])
+        && d.keys().hasOnly(['uid', 'name', 'email', 'phone', 'date', 'time', 'start', 'party', 'status', 'tableIds', 'dishes', 'dishesTotal', 'notes', 'occasion', 'createdAt', 'updatedAt', 'source'])
+        && d.status == 'pending' && d.tableIds.size() == 0
+        && str(d.name, 2, 80) && str(d.phone, 7, 30)
+        && (!('email' in d) || str(d.email, 0, 120))
+        && (!('notes' in d) || str(d.notes, 0, 500))
+        && (!('occasion' in d) || str(d.occasion, 0, 60))
+        && d.date is string && d.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && d.time is string && d.time.matches('^[0-9]{2}:[0-9]{2}$')
+        && d.time >= c.openTime && d.time <= c.lastSeating
+        && !(d.date in c.closedDates)
+        && d.party is int && d.party >= 1 && d.party <= c.maxParty
+        && d.start is int && d.start >= nowMs() + c.minNoticeMin * 60000 && d.start <= nowMs() + c.maxAdvanceDays * 86400000
+        && startMatches(d.start, d.date, d.time)
+        && dishesOk(d.dishes)
+        && d.createdAt == request.time && d.updatedAt == request.time;
+    }
+    function clientReservationUpdateOk() {
+      let d = request.resource.data;
+      return signedIn() && resource.data.uid == me() && d.uid == me() && (
+        // a) solicitar una modificación o la cancelación (la revisa el restaurante)
+        (changed().hasOnly(['change', 'updatedAt'])
+          && resource.data.status in ['pending', 'confirmed']
+          && d.change.keys().hasOnly(['type', 'date', 'time', 'party', 'notes', 'at'])
+          && d.change.type in ['modify', 'cancel']
+          && d.change.at == request.time && d.updatedAt == request.time)
+        ||
+        // b) cancelar directamente: pendiente siempre; confirmada solo dentro del plazo de la política
+        (changed().hasOnly(['status', 'cancelledBy', 'cancelledAt', 'needsRelease', 'change', 'updatedAt'])
+          && d.status == 'cancelled' && d.cancelledBy == 'client' && d.cancelledAt == request.time && d.updatedAt == request.time
+          && (resource.data.status == 'pending'
+              || (resource.data.status == 'confirmed' && d.needsRelease == true
+                  && resource.data.start - nowMs() >= cfg().cancelHours * 3600000)))
+      );
+    }
+    match /reservations/{id} {
+      allow read: if signedIn() && (resource.data.uid == me() || can('reservations') || can('kitchen'));
+      allow create: if newReservationOk() || can('reservations');
+      allow update: if can('reservations') || clientReservationUpdateOk();
+      allow delete: if isOwnerRole();
+
+      // Historial de cambios (solo se añade; nadie lo edita ni lo borra)
+      match /log/{logId} {
+        allow read: if signedIn() && (get(/databases/$(database)/documents/reservations/$(id)).data.uid == me() || can('reservations'));
+        allow create: if signedIn() && request.resource.data.by == me() && request.resource.data.at == request.time
+          && (can('reservations') || getAfter(/databases/$(database)/documents/reservations/$(id)).data.uid == me());
+        allow update, delete: if false;
+      }
+    }
+
+    // ---------- eventos ----------
+    function newEventOk() {
+      let d = request.resource.data;
+      let c = cfg();
+      return signedIn() && d.uid == me()
+        && d.keys().hasAll(['uid', 'name', 'phone', 'type', 'date', 'startTime', 'endTime', 'start', 'guests', 'status', 'createdAt', 'updatedAt'])
+        && d.keys().hasOnly(['uid', 'name', 'email', 'phone', 'type', 'title', 'date', 'startTime', 'endTime', 'start', 'guests', 'space', 'budget', 'food', 'decoration', 'notes', 'status', 'createdAt', 'updatedAt', 'source'])
+        && d.status == 'received'
+        && str(d.name, 2, 80) && str(d.phone, 7, 30)
+        && d.type in c.eventTypes
+        && (!('title' in d) || str(d.title, 0, 100))
+        && (!('notes' in d) || str(d.notes, 0, 1500))
+        && (!('food' in d) || str(d.food, 0, 500))
+        && (!('decoration' in d) || str(d.decoration, 0, 500))
+        && (!('budget' in d) || str(d.budget, 0, 60))
+        && (!('space' in d) || d.space in ['compartido', 'exclusivo'])
+        && d.date is string && d.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && d.startTime is string && d.startTime.matches('^[0-9]{2}:[0-9]{2}$')
+        && d.endTime is string && d.endTime.matches('^[0-9]{2}:[0-9]{2}$')
+        && d.startTime >= c.openTime && d.endTime <= c.closeTime && d.startTime < d.endTime
+        && !(d.date in c.closedDates)
+        && d.guests is int && d.guests >= c.eventMinGuests && d.guests <= c.capacity
+        && d.start is int && d.start >= nowMs() + c.eventMinNoticeDays * 86400000 && d.start <= nowMs() + 365 * 86400000
+        && startMatches(d.start, d.date, d.startTime)
+        && d.createdAt == request.time && d.updatedAt == request.time;
+    }
+    function clientEventUpdateOk() {
+      let d = request.resource.data;
+      return signedIn() && resource.data.uid == me() && d.uid == me() && (
+        (changed().hasOnly(['change', 'updatedAt'])
+          && resource.data.status in ['received', 'review', 'quoted', 'confirmed']
+          && d.change.keys().hasOnly(['type', 'date', 'startTime', 'endTime', 'guests', 'notes', 'at'])
+          && d.change.type in ['modify', 'cancel'] && d.change.at == request.time && d.updatedAt == request.time)
+        ||
+        // aceptar la cotización enviada por el restaurante
+        (changed().hasOnly(['quoteAccepted', 'updatedAt']) && resource.data.status == 'quoted'
+          && d.quoteAccepted == true && d.updatedAt == request.time)
+        ||
+        (changed().hasOnly(['status', 'cancelledBy', 'cancelledAt', 'needsRelease', 'change', 'updatedAt'])
+          && d.status == 'cancelled' && d.cancelledBy == 'client' && d.cancelledAt == request.time && d.updatedAt == request.time
+          && (resource.data.status in ['received', 'review', 'quoted']
+              || (resource.data.status == 'confirmed' && d.needsRelease == true
+                  && resource.data.start - nowMs() >= cfg().eventCancelHours * 3600000)))
+      );
+    }
+    match /events/{id} {
+      allow read: if signedIn() && (resource.data.uid == me() || can('events') || can('kitchen'));
+      allow create: if newEventOk() || can('events');
+      allow update: if can('events') || clientEventUpdateOk();
+      allow delete: if isOwnerRole();
+
+      match /log/{logId} {
+        allow read: if signedIn() && (get(/databases/$(database)/documents/events/$(id)).data.uid == me() || can('events'));
+        allow create: if signedIn() && request.resource.data.by == me() && request.resource.data.at == request.time
+          && (can('events') || getAfter(/databases/$(database)/documents/events/$(id)).data.uid == me());
+        allow update, delete: if false;
+      }
+    }
+
+    // ---------- avisos dentro de la web para cada cliente ----------
+    match /notifications/{id} {
+      allow read: if signedIn() && (resource.data.uid == me() || isStaff());
+      allow create: if signedIn() && request.resource.data.at == request.time && (
+        isStaff() || (request.resource.data.uid == me() && request.resource.data.kind == 'self'));
+      allow update: if signedIn() && resource.data.uid == me() && changed().hasOnly(['read']);
+      allow delete: if signedIn() && resource.data.uid == me();
+    }
+
+    // ---------- cuentas de clientes ----------
+    match /users/{uid} {
+      allow read: if signedIn() && (me() == uid || can('customers'));
+      allow delete: if signedIn() && me() == uid;
+      // El cliente gestiona su perfil, pero no puede marcarse como destacado
+      allow create: if signedIn() && me() == uid
+        && request.resource.data.size() <= 16
+        && !request.resource.data.keys().hasAny(['vip', 'vipNote', 'vipBy', 'vipAt'])
+        && (!('favs' in request.resource.data) || request.resource.data.favs.size() <= 200);
+      allow update: if (signedIn() && me() == uid
+          && request.resource.data.size() <= 16
+          && !changed().hasAny(['vip', 'vipNote', 'vipBy', 'vipAt'])
+          && (!('favs' in request.resource.data) || request.resource.data.favs.size() <= 200))
+        // Clientes destacados: los marca o quita el propietario o un administrador
+        || ((isOwnerRole() || isAdminRole()) && changed().hasOnly(['vip', 'vipNote', 'vipBy', 'vipAt'])
+          && request.resource.data.vip is bool && request.resource.data.vipBy == me() && str(request.resource.data.vipNote, 0, 120));
+
+      match /orders/{orderId} {
+        // El equipo con permiso de clientes ve los pedidos para reconocer a los clientes frecuentes
+        allow read: if signedIn() && (me() == uid || can('customers'));
+        allow delete: if signedIn() && me() == uid;
+        allow create: if signedIn() && me() == uid && request.resource.data.size() <= 12;
+        allow update: if false;
+      }
+      match /reservations/{resId} {
+        allow read, delete: if signedIn() && me() == uid;
+        allow create: if signedIn() && me() == uid && request.resource.data.size() <= 12;
+        allow update: if false;
+      }
+    }
+
+    // ---------- equipo administrativo ----------
+    // El propietario se reclama una sola vez: correo verificado igual al registrado en system/bootstrap
+    // + código secreto cuyo hash SHA-256 está en system/bootstrap. Ese documento solo se crea desde la consola.
+    match /system/bootstrap {
+      allow read, write: if false;
+    }
+    match /system/owner {
+      allow read: if isOwnerRole();
+      allow create: if signedIn() && verifiedEmail()
+        && exists(/databases/$(database)/documents/system/bootstrap)
+        && myEmail() == get(/databases/$(database)/documents/system/bootstrap).data.ownerEmail
+        && hashing.sha256(request.resource.data.code).toHexString().lower() == get(/databases/$(database)/documents/system/bootstrap).data.codeHash
+        && request.resource.data.uid == me()
+        && request.resource.data.at == request.time
+        && getAfter(/databases/$(database)/documents/admins/$(me())).data.role == 'owner';
+      allow update, delete: if false;
+    }
+    match /admins/{uid} {
+      allow read: if signedIn() && (me() == uid || isStaff());
+      allow create: if signedIn() && me() == uid && verifiedEmail() && request.resource.data.active == true && (
+        // reclamo del propietario (en el mismo lote que system/owner)
+        (request.resource.data.role == 'owner'
+          && !exists(/databases/$(database)/documents/system/owner)
+          && existsAfter(/databases/$(database)/documents/system/owner)
+          && getAfter(/databases/$(database)/documents/system/owner).data.uid == me())
+        ||
+        // aceptación de una invitación del propietario o de un administrador
+        (request.resource.data.role in ['admin', 'staff', 'reception', 'kitchen']
+          && exists(/databases/$(database)/documents/invites/$(myEmail()))
+          && request.resource.data.role == get(/databases/$(database)/documents/invites/$(myEmail())).data.role
+          && request.resource.data.perms == get(/databases/$(database)/documents/invites/$(myEmail())).data.perms)
+      )
+        // cuenta creada desde el panel por el propietario (cualquier rol menos propietario)…
+        || (isOwnerRole() && me() != uid && request.resource.data.active == true && request.resource.data.createdBy == me()
+          && request.resource.data.role in ['admin', 'reception', 'kitchen'])
+        // …o por un administrador (solo recepcionista o cocina, con los permisos fijos del rol)
+        || (isAdminRole() && me() != uid && request.resource.data.active == true && request.resource.data.createdBy == me()
+          && request.resource.data.role in ['reception', 'kitchen'] && request.resource.data.perms == rolePerms(request.resource.data.role));
+      allow update: if
+        // el propietario gestiona al resto del equipo, pero no puede crear otro propietario
+        (isOwnerRole() && me() != uid && resource.data.role != 'owner' && request.resource.data.role in ['admin', 'staff', 'reception', 'kitchen'])
+        // el administrador solo gestiona recepcionistas y cocina (nunca al propietario ni a otros administradores)
+        || (isAdminRole() && me() != uid && resource.data.role in ['staff', 'reception', 'kitchen'] && request.resource.data.role in ['reception', 'kitchen']
+          && request.resource.data.perms == rolePerms(request.resource.data.role) && changed().hasOnly(['role', 'perms', 'active', 'updatedAt']))
+        // cada miembro solo puede actualizar su nombre y su último acceso
+        || (signedIn() && me() == uid && changed().hasOnly(['name', 'lastLogin']));
+      allow delete: if (isOwnerRole() && me() != uid && resource.data.role != 'owner')
+        || (isAdminRole() && me() != uid && resource.data.role in ['staff', 'reception', 'kitchen']);
+    }
+    match /invites/{email} {
+      allow read: if isOwnerRole() || isAdminRole() || (signedIn() && verifiedEmail() && myEmail() == email);
+      allow create, update: if email == email.lower() && (
+        (isOwnerRole() && request.resource.data.role in ['admin', 'reception', 'kitchen'])
+        || (isAdminRole() && request.resource.data.role in ['reception', 'kitchen'] && request.resource.data.perms == rolePerms(request.resource.data.role)));
+      allow delete: if isOwnerRole() || (isAdminRole() && resource.data.role in ['staff', 'reception', 'kitchen']) || (signedIn() && verifiedEmail() && myEmail() == email);
+    }
+
+    // ---------- pedidos con pago en línea ----------
+    // Para recoger: 100 % al pedir. A domicilio o para comer aquí: 50 % al pedir y el resto al recibir.
+    // El servidor comprueba el porcentaje, el reparto y que el método esté activo; los precios los revisa el equipo.
+    function payCfg() { return get(/databases/$(database)/documents/settings/payments).data; }
+    function newOrderOk() {
+      let d = request.resource.data;
+      return signedIn() && d.uid == me()
+        && d.keys().hasAll(['uid', 'name', 'phone', 'mode', 'items', 'total', 'pct', 'payNow', 'balance', 'method', 'pay', 'hasProof', 'status', 'createdAt', 'updatedAt', 'source'])
+        && d.keys().hasOnly(['uid', 'email', 'name', 'phone', 'mode', 'address', 'time', 'note', 'items', 'total', 'pct', 'payNow', 'balance', 'method', 'pay', 'hasProof', 'status', 'createdAt', 'updatedAt', 'source'])
+        && d.status == 'review' && d.source == 'web'
+        && d.mode in ['recoger', 'domicilio', 'mesa'] && d.method in ['transfer', 'paypal']
+        && exists(/databases/$(database)/documents/settings/payments) && payCfg()[d.method].enabled == true
+        && d.pay is map && d.pay.status == 'review' && str(d.pay.ref, 4, 60)
+        && d.pay.keys().hasOnly(['status', 'ref', 'from', 'order', 'state', 'payer', 'usd', 'rate'])
+        && d.pct == (d.mode == 'recoger' ? 100 : 50)
+        && d.total is int && d.total > 0 && d.total <= 500000
+        && d.payNow is int && d.payNow * 100 >= d.total * d.pct && d.payNow * 100 < d.total * d.pct + 100
+        && d.balance == d.total - d.payNow
+        && d.items is list && d.items.size() >= 1 && d.items.size() <= 60
+        && str(d.name, 2, 80) && str(d.phone, 7, 30)
+        && (d.mode != 'domicilio' || str(d.address, 8, 200))
+        && (!('note' in d) || str(d.note, 0, 200))
+        && d.hasProof is bool && (d.method != 'transfer' || d.hasProof == true)
+        && d.createdAt == request.time && d.updatedAt == request.time;
+    }
+    match /orders/{id} {
+      allow read: if signedIn() && (resource.data.uid == me() || can('orders') || can('kitchen'));
+      allow create: if newOrderOk();
+      allow update: if can('orders')
+        // la cocina solo avanza: pagado → en preparación → listo
+        || (can('kitchen') && changed().hasOnly(['status', 'updatedAt', 'statusBy'])
+          && ((resource.data.status == 'confirmed' && request.resource.data.status == 'preparing')
+            || (resource.data.status == 'preparing' && request.resource.data.status == 'ready')))
+        // el cliente puede cancelar mientras el pago no se ha verificado
+        || (signedIn() && resource.data.uid == me() && resource.data.status == 'review'
+          && changed().hasOnly(['status', 'cancelledBy', 'cancelledAt', 'updatedAt'])
+          && request.resource.data.status == 'cancelled' && request.resource.data.cancelledBy == 'client');
+      allow delete: if isOwnerRole();
+    }
+    // Foto del comprobante de transferencia: privada (el cliente y el equipo de pedidos)
+    match /orderProofs/{id} {
+      allow read: if signedIn() && (resource.data.uid == me() || can('orders'));
+      allow create: if signedIn() && request.resource.data.uid == me()
+        && request.resource.data.keys().hasOnly(['uid', 'data', 'at'])
+        && request.resource.data.data is string && request.resource.data.data.size() < 900000
+        && request.resource.data.at == request.time
+        && getAfter(/databases/$(database)/documents/orders/$(id)).data.uid == me();
+      allow update: if false;
+      allow delete: if isOwnerRole();
+    }
+
+    // ---------- historial administrativo y registro de errores ----------
+    match /auditLog/{id} {
+      allow read: if can('audit');
+      allow create: if isStaff() && request.resource.data.uid == me() && request.resource.data.at == request.time
+        && str(request.resource.data.action, 1, 60);
+      // Nadie lo edita; solo el propietario puede borrarlo (el panel anota después quién lo borró)
+      allow update: if false;
+      allow delete: if isOwnerRole();
+    }
+    match /errorLog/{id} {
+      allow read: if can('audit');
+      allow create: if request.resource.data.keys().hasOnly(['at', 'where', 'code', 'message', 'page', 'uid'])
+        && request.resource.data.at == request.time
+        && str(request.resource.data.where, 1, 80) && str(request.resource.data.message, 0, 500)
+        && (!('code' in request.resource.data) || str(request.resource.data.code, 0, 80))
+        && (!('page' in request.resource.data) || str(request.resource.data.page, 0, 200));
+      allow delete: if isOwnerRole();
+      allow update: if false;
+    }
+
+    // Todo lo demás, cerrado
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

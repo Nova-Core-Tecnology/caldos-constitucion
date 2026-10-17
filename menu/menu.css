@@ -155,10 +155,10 @@
   .chips { flex-wrap: nowrap; overflow-x: auto; margin-inline: -.9rem; padding: .2rem .9rem .4rem; scroll-snap-type: x proximity; scrollbar-width: none; }
   .chips::-webkit-scrollbar { display: none; }
   .chip { flex: none; scroll-snap-align: start; }
-  .msec__head { flex-wrap: wrap; }
+  .msec__head { display: grid; grid-template-columns: 50px minmax(0, 1fr); column-gap: .9rem; row-gap: .5rem; }
   .msec__ic { width: 50px; height: 50px; border-radius: 17px 17px 17px 5px; }
   .msec__ic svg { width: 26px; height: 26px; }
-  .msec__n { margin-left: calc(50px + 1rem); }
+  .msec__n { grid-column: 2; justify-self: start; }
 }
 @media (max-width: 600px) {
   .mh h1 { font-size: clamp(3.8rem, 20vw, 5.4rem); }

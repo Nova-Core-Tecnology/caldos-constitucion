@@ -1,23 +1,12 @@
 /* Caldos Constitución — decoración de hierbas (solo adorno, nunca contenido).
-   Necesita botanical-art.js (window.BOTANICAL_SPRITE y window.BOTANICAL_ART) y botanical.css.
-   Inserta macizos de hierbas detrás del contenido de las secciones de Inicio. */
+   Necesita botanical.css. Cada mata es una imagen de assets/botanical/ (el navegador la dibuja una vez y solo mueve la capa,
+   en lugar de animar cientos de plantas dentro de un SVG en línea). Inserta macizos de hierbas en las secciones de Inicio. */
 (function () {
   "use strict";
-  var ART = window.BOTANICAL_ART;
-  if (!ART || !document.querySelector) return;
+  if (!document.querySelector) return;
+  var BASE = (window.CC && window.CC.base) || "../";
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* Las hojas se dibujan una vez (sprite) y todas las piezas las reutilizan */
-  function sprite() {
-    if (document.getElementById("botanical-sprite-host") || !window.BOTANICAL_SPRITE) return;
-    var d = document.createElement("div");
-    d.id = "botanical-sprite-host";
-    d.setAttribute("aria-hidden", "true");
-    d.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
-    d.innerHTML = window.BOTANICAL_SPRITE;
-    document.body.insertBefore(d, document.body.firstChild);
-  }
 
   var io = null;
   function watch(host, layer) {
@@ -47,10 +36,9 @@
     layer.setAttribute("data-theme", theme);
     layer.setAttribute("aria-hidden", "true");
     items.forEach(function (it) {
-      if (!ART[it[0]]) return;
       var d = document.createElement("div");
       d.className = "botanical-deco botanical-deco--" + it[1] + (it[2] ? " botanical-flip-" + it[2] : "") + (it[3] ? " botanical-secondary" : "");
-      d.innerHTML = ART[it[0]];
+      d.innerHTML = '<img src="' + BASE + "assets/botanical/" + it[0] + '.svg" alt="" loading="lazy" decoding="async" draggable="false">';
       layer.appendChild(d);
     });
     host.appendChild(layer);
@@ -58,7 +46,6 @@
   }
 
   function sections() {
-    sprite();
     var q = function (s) { return document.querySelector(s); };
 
     build(q("#hero"), "dark", [["hedge-a", "hedge"], ["tall-a", "hero-l", "", true], ["bush-xl", "hero-r"]], "botanical-layer--hero");

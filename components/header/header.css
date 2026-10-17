@@ -25,7 +25,7 @@
 .hd-strip__soc a:hover { background: rgba(235, 190, 139, .16); }
 
 /* ---------- Barra principal ---------- */
-.hd-bar { position: relative; isolation: isolate; height: var(--header-h); background: linear-gradient(180deg, rgba(46, 23, 14, .95), rgba(36, 18, 10, .95)); -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px); border-bottom: 1px solid rgba(235, 190, 139, .18); transition: height .3s ease, box-shadow .3s ease; }
+.hd-bar { position: relative; isolation: isolate; height: var(--header-h); background: linear-gradient(180deg, #2c160c, #241209); border-bottom: 1px solid rgba(235, 190, 139, .18); transition: height .3s ease, box-shadow .3s ease; }
 .site-header.is-scrolled .hd-bar { height: 66px; box-shadow: 0 14px 34px rgba(20, 8, 3, .42); }
 .site-header__in { height: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.2rem; }
 .scroll-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; pointer-events: none; }
@@ -192,6 +192,7 @@ nav.main-nav { position: relative; padding: .32rem; border-radius: 999px; backgr
   .mlink[aria-current="page"] .mlink__go { background: var(--gold); color: var(--brown-deep); border-color: var(--gold); }
 
   .mdrawer__row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: 1.5rem 0 .8rem; }
+  .mdrawer__row .mpill:nth-child(3) { grid-column: 1 / -1; }
   .mpill { display: flex; align-items: center; gap: .55rem; min-height: 52px; padding: 0 1rem; border-radius: 16px; background: rgba(255, 248, 240, .07); border: 1px solid rgba(246, 230, 211, .14); color: var(--cream-white); font-weight: 800; text-decoration: none; }
   .mpill svg { width: 20px; height: 20px; color: var(--gold); }
   .mpill__n { margin-left: auto; min-width: 24px; height: 24px; padding: 0 6px; display: grid; place-items: center; border-radius: 999px; background: var(--red); color: #fff; font-size: .75rem; }

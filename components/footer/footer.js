@@ -65,7 +65,7 @@
       "<p>Caldos con sazón dominicana, servidos entre el verde de San Cristóbal, la cuna de la Constitución.</p><div class=\"fsocials\">" + social + "</div></section>" +
       '<nav class="fcol" aria-labelledby="fh-ex"><h3 id="fh-ex">Explora</h3><ul class="fnav">' +
       nav("inicio/inicio.html", "home", "Inicio") + nav("nosotros/nosotros.html", "users", "Nosotros") + nav("menu/menu.html", "utensils", "Menú") +
-      nav("contacto/contacto.html", "phone", "Contacto") + nav("reservas/reservas.html", "calendar", "Reservas") + nav("favoritos/favoritos.html", "heart", "Favoritos") + nav("carrito/carrito.html", "cart", "Carrito") + "</ul></nav>" +
+      nav("contacto/contacto.html", "phone", "Contacto") + nav("reservas/reservas.html", "calendar", "Reservas") + nav("eventos/eventos.html", "party", "Eventos") + nav("favoritos/favoritos.html", "heart", "Favoritos") + nav("carrito/carrito.html", "cart", "Carrito") + nav("cuenta/cuenta.html", "users", "Mi cuenta") + "</ul></nav>" +
       '<section class="fcol" aria-labelledby="fh-visit"><h3 id="fh-visit">Visítanos</h3><ul class="frows">' +
       row("pin", "Dirección", '<span id="f-addr">' + CC.esc(c.address) + '</span><span class="frow__tools"><a class="fchip" href="' + mapUrl + '" target="_blank" rel="noopener noreferrer">Ver mapa' + NEW + '</a><button class="fchip" type="button" id="f-copy">Copiar</button></span>') +
       row("chat", "WhatsApp", '<a href="' + wa + '" target="_blank" rel="noopener noreferrer">' + CC.esc(c.whatsappDisplay) + NEW + "</a>") +
@@ -80,11 +80,9 @@
       '<div class="fab"><button class="fab__top" type="button" id="f-top" aria-label="Volver arriba">' + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>' +
       '<a class="fab__wa" href="' + wa + '" target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp (se abre en una pestaña nueva)">' + CC.icon("chat") + "<span>WhatsApp</span></a></div>";
 
-    /* Seto de hierbas del sitio como suelo del dosel (si botanical-art.js está cargado) */
+    /* Seto de hierbas como suelo del dosel (una imagen: barata de pintar) */
     var hedge = document.querySelector(".ft-hedge");
-    if (hedge && window.BOTANICAL_ART && window.BOTANICAL_ART["hedge-a"]) {
-      hedge.innerHTML = '<div class="botanical-layer jg-grow" data-theme="dark"><div class="botanical-deco botanical-deco--hedge">' + window.BOTANICAL_ART["hedge-a"] + "</div></div>";
-    }
+    if (hedge) hedge.innerHTML = '<div class="hedges hedges--foot jg-grow"><img class="hedge" src="' + b + 'assets/botanical/hedge-a.svg" alt="" loading="lazy" decoding="async" draggable="false"></div>';
 
     document.getElementById("f-year").textContent = new Date().getFullYear();
     document.getElementById("f-copy").addEventListener("click", function () { copy(c.address); });

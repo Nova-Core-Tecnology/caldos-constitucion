@@ -60,8 +60,7 @@
   /* ---------- enredaderas: tallo que se traza solo, hojas alternas, zarcillos y cayenas ---------- */
   function grow(svgEl, pts, o) {
     var rand = rng(o.seed || 7);
-    var stem = el("path", { d: smooth(pts), "class": "vs", pathLength: "1", "stroke-width": o.stroke || 2.4 });
-    stem.style.setProperty("--d0", (o.delay || 0) + "s");
+    var stem = el("path", { d: smooth(pts), "class": "vs", "stroke-width": o.stroke || 2.4 });
     svgEl.appendChild(stem);
     var spots = walk(pts, o.gap || 26), frag = document.createDocumentFragment(), side = 1;
     var flowers = o.flowers || 0, flowerAt = [];
@@ -73,9 +72,6 @@
       var ang = q.ang + side * (o.spread || 70) + (rand() - .5) * 30 + 90;
       if (o.droop) ang = ang * (1 - o.droop) + 180 * o.droop;
       var g = el("g", { "class": "vl " + (isFlower ? "vl--flower" : "c" + (1 + Math.floor(rand() * 5))), transform: "translate(" + r1(q.x) + " " + r1(q.y) + ") rotate(" + r1(ang) + ")" });
-      g.style.setProperty("--d", r1((o.delay || 0) + .3 + q.p * (o.dur || 1.9)) + "s");
-      g.style.setProperty("--s", r1(4 + rand() * 3) + "s");
-      g.style.setProperty("--sd", r1(-rand() * 5) + "s");
       var inner = el("g", {});
       if (isFlower) inner.appendChild(el("use", { href: "#v-flower", x: -32, y: -32, width: 64, height: 64, transform: "rotate(" + r1(rand() * 70) + ") scale(" + (Math.round((o.flowerSize || .5) * 100) / 100) + ")" }));
       else inner.appendChild(el("use", { href: rand() < .82 ? "#v-pothos" : "#v-leaf", x: -30, y: -64, width: 60, height: 68, transform: "translate(0 -3) scale(" + (Math.round(s * 100) / 100) + ")" }));
@@ -83,8 +79,7 @@
       frag.appendChild(g);
       if (!isFlower && rand() < (o.curls || .12)) {
         var a = (q.ang - side * 60) * Math.PI / 180, cx = q.x + Math.cos(a) * 14, cy = q.y + Math.sin(a) * 14;
-        var c = el("path", { d: "M" + r1(q.x) + " " + r1(q.y) + "Q" + r1(cx) + " " + r1(cy) + " " + r1(cx + 6 * side) + " " + r1(cy + 4) + "T" + r1(cx + 2) + " " + r1(cy + 9) + "T" + r1(cx - 3 * side) + " " + r1(cy + 4), "class": "vs vs--thin", pathLength: "1" });
-        c.style.setProperty("--d0", r1((o.delay || 0) + .6 + q.p * (o.dur || 1.9)) + "s");
+        var c = el("path", { d: "M" + r1(q.x) + " " + r1(q.y) + "Q" + r1(cx) + " " + r1(cy) + " " + r1(cx + 6 * side) + " " + r1(cy + 4) + "T" + r1(cx + 2) + " " + r1(cy + 9) + "T" + r1(cx - 3 * side) + " " + r1(cy + 4), "class": "vs vs--thin" });
         svgEl.appendChild(c);
       }
     });
@@ -238,28 +233,21 @@
     });
   }
 
-  /* ---------- setos de hierbas del sitio al pie de las secciones con data-hedge ---------- */
+  /* ---------- setos de hierbas al pie de las secciones con data-hedge ----------
+     Se usan como imagen: el navegador los dibuja una vez y solo mueve la capa (antes eran SVG en línea con cientos de plantas animadas) */
+  function hedgeImg(name, flip) {
+    return '<img class="hedge' + (flip ? " hedge--flip" : "") + '" src="' + (CC.base || "../") + "assets/botanical/" + name + '.svg" alt="" loading="lazy" decoding="async" draggable="false">';
+  }
   function hedges(root) {
-    var ART = window.BOTANICAL_ART; if (!ART) return;
-    /* Las hierbas usan su propio sprite de hojas (botanical-art.js); se inserta si botanical.js no lo hizo */
-    if (window.BOTANICAL_SPRITE && !document.getElementById("botanical-sprite-host")) {
-      var sp = document.createElement("div");
-      sp.id = "botanical-sprite-host"; sp.setAttribute("aria-hidden", "true");
-      sp.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
-      sp.innerHTML = window.BOTANICAL_SPRITE;
-      document.body.insertBefore(sp, document.body.firstChild);
-    }
     (root || document).querySelectorAll("[data-hedge]").forEach(function (sec, i) {
       if (sec._hedge) return; sec._hedge = true;
-      var theme = sec.getAttribute("data-hedge") === "dark" ? "dark" : "light";
-      var art = ART[theme === "dark" ? "hedge-a" : (i % 2 ? "hedge-a" : "hedge-b")]; if (!art) return;
+      var dark = sec.getAttribute("data-hedge") === "dark";
       if (getComputedStyle(sec).position === "static") sec.style.position = "relative";
-      sec.classList.add("botanical-host");
+      sec.classList.add("has-hedge");
       var layer = document.createElement("div");
-      layer.className = "botanical-layer botanical-layer--jg jg-grow";
-      layer.setAttribute("data-theme", theme);
+      layer.className = "hedges jg-grow" + (dark ? " hedges--dark" : "");
       layer.setAttribute("aria-hidden", "true");
-      layer.innerHTML = '<div class="botanical-deco botanical-deco--hedge' + (i % 2 ? " botanical-flip-x" : "") + '">' + art + "</div>";
+      layer.innerHTML = hedgeImg(dark || i % 2 ? "hedge-a" : "hedge-b", i % 2);
       sec.appendChild(layer);
     });
   }
@@ -316,14 +304,17 @@
   var plx = [], px = 0, py = 0, ticking = false, plxOn = false;
   function plxRun() {
     ticking = false;
-    var vh = window.innerHeight;
+    var vh = window.innerHeight, rects = new Map(), out = [];
+    /* Primero se leen las posiciones (una por sección) y después se escribe: así no se fuerza el diseño en cada pieza */
     plx.forEach(function (it) {
-      var r = it.host.getBoundingClientRect();
+      var r = rects.get(it.host); if (!r) { r = it.host.getBoundingClientRect(); rects.set(it.host, r); }
       if (r.bottom < -200 || r.top > vh + 200) return;
       var y = -(r.top + r.height / 2 - vh / 2) * it.d, x = 0;
       if (it.pointer) { x = px * it.d * 260; y += py * it.d * 200; }
-      it.n.style.translate = r1(x) + "px " + r1(y) + "px";
+      var v = Math.round(x) + "px " + Math.round(y) + "px";
+      if (v !== it.v) { it.v = v; out.push(it); }
     });
+    out.forEach(function (it) { it.n.style.translate = it.v; });
   }
   function plxReq() { if (!ticking) { ticking = true; requestAnimationFrame(plxRun); } }
   function parallax(root) {

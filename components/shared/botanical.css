@@ -55,12 +55,9 @@
 .botanical-deco--ft-up-l { left: 0; bottom: 100%; margin-bottom: -4px; width: clamp(180px, 20vw, 320px); }
 .botanical-deco--ft-up-r { right: 0; bottom: 100%; margin-bottom: -4px; width: clamp(200px, 22vw, 360px); }
 
-/* ---- Animación: cada mata brota desde su base y algunas se mecen apenas ---- */
-.botanical-layer .bp { opacity: 0; transform: scale(.86); transition: opacity 1.2s ease var(--d, 0s), transform 1.8s cubic-bezier(.2, .8, .2, 1) var(--d, 0s); }
-.botanical-layer.is-in .bp { opacity: 1; transform: none; }
-.botanical-layer.is-in .bp.sw { animation: botanical-sway var(--s, 9s) ease-in-out calc(var(--d, 0s) + 2.5s) infinite alternate; }
-.botanical-layer.is-off .bp.sw { animation-play-state: paused; }
-@keyframes botanical-sway { from { transform: rotate(-.9deg); } to { transform: rotate(.9deg); } }
+/* ---- Animación: cada mata es una imagen que brota desde su base (solo opacity/transform: la mueve la GPU) ---- */
+.botanical-deco img { display: block; width: 100%; height: auto; user-select: none; opacity: 0; transform: translateY(18px) scale(.96); transform-origin: 50% 100%; transition: opacity 1s ease, transform 1.4s cubic-bezier(.2, .8, .2, 1); }
+.botanical-layer.is-in .botanical-deco img { opacity: 1; transform: none; }
 
 /* ---- Tablet ---- */
 /* Las matas laterales solo viven en el margen libre a los lados del contenido (pantallas anchas) */
@@ -75,7 +72,7 @@
 
 /* ---- Movimiento reducido: todo visible y quieto ---- */
 @media (prefers-reduced-motion: reduce) {
-  .botanical-layer .bp { opacity: 1; transform: none; transition: none; animation: none !important; }
+  .botanical-deco img { opacity: 1; transform: none; transition: none; }
 }
 
 @media print { .botanical-layer { display: none; } }

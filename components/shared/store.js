@@ -24,7 +24,8 @@
     if (valid(k) && q > 0) cart[k] = Math.min(q, 99);
   });
 
-  function emit() { listeners.forEach(function (fn) { fn(); }); }
+  /* source: "local" (lo hizo el usuario aquí) o "remote" (llegó de su cuenta en la nube); la sincronización solo sube lo local */
+  function emit(source) { listeners.forEach(function (fn) { fn(source || "local"); }); }
 
   CC.store = {
     onChange: function (fn) { listeners.push(fn); },
@@ -53,13 +54,20 @@
     },
     remove: function (id) { delete cart[id]; write(KEYS.cart, cart); emit(); },
     clear: function () { cart = {}; write(KEYS.cart, cart); emit(); },
+    /* Reemplaza favoritos y carrito de una vez (al iniciar o cerrar sesión, o cuando cambian en otro dispositivo) */
+    replaceAll: function (f, c, source) {
+      favs = (f || []).map(Number).filter(valid).filter(function (id, i, a) { return a.indexOf(id) === i; });
+      cart = {};
+      Object.keys(c || {}).forEach(function (k) { var q = Math.floor(Number(c[k])); if (valid(k) && q > 0) cart[k] = Math.min(q, 99); });
+      write(KEYS.fav, favs); write(KEYS.cart, cart); emit(source || "remote");
+    },
     total: function () {
       return Object.keys(cart).reduce(function (a, k) { return a + CC.getItem(k).price * cart[k]; }, 0);
     }
   };
   // Sincroniza entre pestañas
   window.addEventListener("storage", function (e) {
-    if (e.key === KEYS.fav) { favs = (read(KEYS.fav, []) || []).map(Number).filter(valid); emit(); }
-    if (e.key === KEYS.cart) { cart = read(KEYS.cart, {}) || {}; emit(); }
+    if (e.key === KEYS.fav) { favs = (read(KEYS.fav, []) || []).map(Number).filter(valid); emit("tab"); }
+    if (e.key === KEYS.cart) { cart = read(KEYS.cart, {}) || {}; emit("tab"); }
   });
 })(window.CC = window.CC || {});

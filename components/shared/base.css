@@ -70,7 +70,7 @@ p { margin: 0 0 1em; }
 .notice strong { display: block; margin-bottom: .15rem; }
 
 /* Tarjetas de plato: foto a tarjeta completa con panel de cristal */
-.dish-grid { display: grid; gap: 1.6rem; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+.dish-grid { display: grid; gap: 1.6rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); }
 .dish { --kr: 232, 121, 58; position: relative; isolation: isolate; display: flex; flex-direction: column; aspect-ratio: 3 / 4.15; background: var(--brown-deep); border-radius: 32px; overflow: hidden; color: var(--cream-white); box-shadow: 0 4px 10px rgba(46, 23, 14, .12), 0 18px 36px rgba(46, 23, 14, .22); transition: transform .35s ease, box-shadow .35s ease; }
 .dish.reveal.is-visible { transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s ease, opacity .35s ease; }
 .dish:hover, .dish:focus-within { transform: translateY(-8px); box-shadow: 0 6px 12px rgba(46, 23, 14, .12), 0 34px 60px rgba(var(--kr), .4); }
@@ -277,3 +277,19 @@ p { margin: 0 0 1em; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Transición suave entre páginas del sitio (Chrome/Edge/Safari recientes; el resto navega normal) */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-out .22s ease both; }
+::view-transition-new(root) { animation: vt-in .38s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+.site-header { view-transition-name: site-header; }
+::view-transition-group(site-header) { animation-duration: 0s; }
+@media (prefers-reduced-motion: reduce) { ::view-transition-old(root), ::view-transition-new(root) { animation: none; } }
+
+/* Plato agotado (lo marca la cocina desde el panel) */
+.btn--sold { background: #efe6dc; color: #8a6a58; box-shadow: none; cursor: not-allowed; pointer-events: none; }
+.dish.is-sold .dish__img { filter: grayscale(.85) brightness(.95); }
+.dish.is-sold .dish__media::after { content: "Agotado por hoy"; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-6deg); padding: .35rem .9rem; border-radius: 10px; background: rgba(46, 23, 14, .88); color: #fff; font: 800 .85rem var(--font-body); letter-spacing: .04em; pointer-events: none; }
+.dish.is-sold .dish__media { position: relative; }

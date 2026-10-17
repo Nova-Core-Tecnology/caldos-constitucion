@@ -2,9 +2,11 @@
    Solo adorno: siempre detrás del contenido, sin eventos de puntero y quieta con "reducir movimiento".
    Las piezas se declaran en el HTML (.jg, .jp, .vine) o con un preset: <section data-jungle="light-a">. */
 
-@keyframes jsway { from { transform: rotate(-1.8deg); } to { transform: rotate(1.8deg); } }
+/* Todo el movimiento va sobre transform/opacity del elemento HTML: lo hace la GPU sin redibujar las hojas */
+@keyframes jgrow { from { opacity: 0; transform: scale(.55); } to { opacity: var(--o, 1); transform: none; } }
+@keyframes jsway { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-1.6deg); } 75% { transform: rotate(1.6deg); } }
+@keyframes vin { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
 @keyframes vsway { from { transform: rotate(-2.4deg); } to { transform: rotate(2.4deg); } }
-@keyframes flutter { from { rotate: -7deg; } to { rotate: 7deg; } }
 @keyframes bloomIn { from { opacity: 0; transform: scale(.2) rotate(-90deg); } to { opacity: 1; transform: none; } }
 @keyframes bloomBob { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -6px; rotate: 8deg; } }
 @keyframes jfall {
@@ -13,7 +15,6 @@
   88% { opacity: var(--o, .8); }
   100% { transform: translate3d(var(--dx, 60px), var(--fh, 900px), 0) rotate(var(--rot, 360deg)); opacity: 0; }
 }
-@keyframes wobble { from { translate: -14px 0; rotate: -18deg; } to { translate: 14px 0; rotate: 18deg; } }
 @keyframes firefly {
   0%, 100% { translate: 0 0; opacity: 0; }
   15% { opacity: var(--o, .9); }
@@ -46,23 +47,19 @@
 /* ---- Capa de selva: detrás del contenido de su sección ---- */
 .has-jg { position: relative; isolation: isolate; }
 .jg { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: layout paint; }
-.tone-shade.jg, .jg.is-shade { mix-blend-mode: multiply; }
 
 /* ---- Pieza: se coloca por la base del tallo (--bx, --by), con ancho --w, giro --r y volteo --sx ---- */
 .jp {
   position: absolute; display: block; overflow: visible; width: var(--w, 300px); height: auto; pointer-events: none;
   rotate: var(--r, 0deg); scale: var(--sx, 1) 1;
-  opacity: 0; transform: scale(.5);
-  transition: opacity 1.2s ease var(--d, 0s), transform 1.8s cubic-bezier(.2, .8, .2, 1) var(--d, 0s);
+  opacity: 0;
   filter: var(--blur, none);
 }
 .jp--mon { aspect-ratio: 210 / 236; transform-origin: 49.5% 100%; left: calc(var(--bx, 0px) - var(--w, 300px) * .495); top: calc(var(--by, 100%) - var(--w, 300px) * 1.124); }
 .jp--palm { aspect-ratio: 300 / 270; transform-origin: 6.7% 92.6%; left: calc(var(--bx, 0px) - var(--w, 300px) * .067); top: calc(var(--by, 100%) - var(--w, 300px) * .833); }
 .jp--fern { aspect-ratio: 200 / 250; transform-origin: 5% 96%; left: calc(var(--bx, 0px) - var(--w, 300px) * .05); top: calc(var(--by, 100%) - var(--w, 300px) * 1.2); }
-.jp use { transform-box: view-box; transform-origin: inherit; }
-.is-in .jp, .jp.is-in { opacity: var(--o, 1); transform: none; }
-.is-in .jp use { animation: jsway var(--s, 9s) ease-in-out var(--sd, -2s) infinite alternate; }
-.is-off .jp use, .is-off .vine svg, .is-off .vl use, .is-off .fall__leaf, .is-off .fly { animation-play-state: paused; }
+.is-in .jp, .jp.is-in { opacity: var(--o, 1); animation: jgrow 1.5s cubic-bezier(.2, .8, .2, 1) var(--d, 0s) both, jsway var(--s, 9s) ease-in-out calc(var(--d, 0s) + 1.5s) infinite; }
+.is-off .jp, .is-off .vine svg, .is-off .fall__leaf, .is-off .fly, .is-off.vine svg { animation-play-state: paused; }
 
 /* ---- Imágenes botánicas del sitio (esquinas y bordes de enredadera) ---- */
 .jimg { position: absolute; display: block; background: center / contain no-repeat; opacity: 0; transition: opacity 1.6s ease .2s; pointer-events: none; }
@@ -71,19 +68,16 @@
 .jimg--edge { width: clamp(360px, 46vw, 680px); aspect-ratio: 900 / 150; }
 
 /* ---- Enredaderas generadas (cuelgan, trepan o se tienden como guirnalda) ---- */
-.vine { position: absolute; top: 0; z-index: 0; display: block; pointer-events: none; }
+.vine { position: absolute; top: 0; z-index: 0; display: block; pointer-events: none; opacity: 0; }
+.vine.is-in { animation: vin 1.2s cubic-bezier(.2, .8, .2, 1) both; }
 .vine svg { display: block; overflow: visible; }
 .vine[data-vine="hang"] svg { transform-origin: 50% 0; animation: vsway var(--s, 7s) ease-in-out var(--sd, 0s) infinite alternate; }
 .vine[data-vine="drape"] svg, .vine[data-vine="garland"] svg { transform-origin: 50% 0; animation: vsway 11s ease-in-out infinite alternate; }
 .vine[data-vine="garland"] svg { animation-duration: 16s; }
-.vs { fill: none; stroke: var(--ls); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.4s cubic-bezier(.45, 0, .2, 1) var(--d0, 0s); }
+.vs { fill: none; stroke: var(--ls); stroke-linecap: round; stroke-linejoin: round; }
 .vs--thin { stroke-width: 1.3; opacity: .8; }
-.vine.is-in .vs { stroke-dashoffset: 0; }
-.vl > g { scale: 0; transition: scale .8s cubic-bezier(.2, .9, .3, 1.25) var(--d, 0s); }
-.vine.is-in .vl > g { scale: 1; }
-.vl use { animation: flutter var(--s, 5s) ease-in-out var(--sd, 0s) infinite alternate; }
 .vl.c1 { --lf: var(--g1); } .vl.c2 { --lf: var(--g2); } .vl.c3 { --lf: var(--g3); } .vl.c4 { --lf: var(--g4); } .vl.c5 { --lf: var(--g5); }
-.vl--flower use { animation: none; filter: drop-shadow(0 3px 4px rgba(46, 23, 14, .35)); }
+
 
 /* ---- Cayenas sueltas ---- */
 .bloom { position: absolute; z-index: 3; display: block; width: 64px; aspect-ratio: 1; overflow: visible; pointer-events: none; filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .35)); animation: bloomIn 1s 1.3s cubic-bezier(.2, .8, .2, 1.2) both, bloomBob 6s 2.3s ease-in-out infinite; }
@@ -91,7 +85,6 @@
 /* ---- Hojas que caen y luciérnagas ---- */
 .fall { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .fall__leaf { position: absolute; top: -70px; display: block; overflow: visible; animation: jfall var(--t, 16s) linear var(--dl, 0s) infinite; }
-.fall__leaf use { animation: wobble calc(var(--t, 16s) / 5) ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
 .fly { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: #ffe7a3; box-shadow: 0 0 6px 2px rgba(255, 214, 120, .8), 0 0 18px 6px rgba(255, 190, 90, .35); opacity: 0; animation: firefly var(--t, 9s) ease-in-out var(--dl, 0s) infinite; pointer-events: none; }
 
 /* ==========================================================================
@@ -128,9 +121,13 @@
 .jg--page .jz-palm-tr { --w: clamp(240px, 26vw, 400px); --by: 10px; }
 .jg--page .jz-fern-br { --by: calc(100% + 30px); }
 
-/* Setos del sitio (botanical-art.js) al pie de las secciones con data-hedge */
-.botanical-layer--jg .botanical-deco--hedge { opacity: .9; }
-.botanical-layer--jg[data-theme="dark"] .botanical-deco--hedge { opacity: .7; }
+/* Setos de hierbas al pie de las secciones con data-hedge: una imagen por sección (barata de pintar) */
+.has-hedge { isolation: isolate; }
+.hedges { position: absolute; z-index: -1; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; overflow: hidden; pointer-events: none; opacity: 0; transform: translateY(24px); transition: opacity 1s ease, transform 1.4s cubic-bezier(.2, .8, .2, 1); }
+.hedges.is-in { opacity: .92; transform: none; }
+.hedges--dark.is-in { opacity: .75; }
+.hedge { display: block; flex: none; width: max(100%, 720px); height: auto; user-select: none; }
+.hedge--flip { transform: scaleX(-1); }
 
 /* ==========================================================================
    Responsive: las enredaderas viven en el margen libre; sin margen, se retiran
@@ -158,11 +155,11 @@
 
 /* ---- Movimiento reducido: la vegetación aparece completa y quieta ---- */
 @media (prefers-reduced-motion: reduce) {
-  .jp { opacity: var(--o, 1); transform: none; transition: none; }
-  .jp use, .vine svg, .vl use, .bloom { animation: none !important; }
+  .jp, .is-in .jp { opacity: var(--o, 1); transform: none; animation: none !important; }
+  .vine, .vine.is-in { opacity: 1; animation: none !important; }
+  .vine svg, .bloom { animation: none !important; }
   .jimg { opacity: var(--o, .9); transition: none; }
-  .vs { stroke-dashoffset: 0; transition: none; }
-  .vl > g { scale: 1; transition: none; }
   .fall, .fly { display: none; }
+  .hedges { opacity: .9; transform: none; transition: none; }
 }
 @media print { .jg, .vine, .fall, .bloom { display: none !important; } }

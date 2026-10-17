@@ -36,7 +36,7 @@
 .flow__i.is-now .flow__t small { color: rgba(246, 230, 211, .8); }
 
 /* ---------- Distribución ---------- */
-.kart-sec { background: linear-gradient(180deg, #FFF8F0, #F6E6D3); }
+.kart-sec { overflow-x: clip; background: linear-gradient(180deg, #FFF8F0, #F6E6D3); }
 .cart { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr); gap: clamp(1.4rem, 3vw, 2.6rem); align-items: start; }
 .cart__main { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.4rem, 3vw, 2rem); min-width: 0; }
 .cart__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
@@ -229,3 +229,10 @@
   .line:hover, .sug:hover { transform: none; }
 }
 @media print { .mbar, .undo, .receipt__wa, .receipt__tools, .more, .opts { display: none; } }
+
+/* Pago en línea */
+.receipt__split { margin: .55rem 0 0; color: var(--ink-soft); font-size: .86rem; text-align: center; }
+.receipt__split b { color: var(--brown); }
+.receipt__alt { display: flex; align-items: center; justify-content: center; gap: .4rem; margin-top: .7rem; color: var(--red-ink); font-weight: 800; font-size: .88rem; text-decoration: none; }
+.receipt__alt:hover { text-decoration: underline; }
+.receipt__alt svg { width: 16px; height: 16px; }

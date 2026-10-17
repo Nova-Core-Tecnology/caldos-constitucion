@@ -8,3 +8,12 @@ desktop.ini
 # Cachés
 __pycache__/
 *.pyc
+
+# Firebase (registros locales del emulador)
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/
+
+# Configuración local de Claude Code
+.claude/

@@ -47,6 +47,7 @@
       '<nav class="main-nav" aria-label="Principal"><ul class="nav" id="nav">' + desk + '</ul><span class="nav__pill" aria-hidden="true">' +
       leaf("v-leaf", "nav__sprout nav__sprout--a") + leaf("v-leaf", "nav__sprout nav__sprout--b") + "</span></nav>" +
       '<div class="header-actions">' +
+      '<div class="hx hx--acct" id="acct"></div>' +
       '<div class="hx"><a class="icon-btn" href="' + b + 'favoritos/favoritos.html" aria-label="Favoritos" data-badge="fav"' + cur("favoritos") + ">" + CC.icon("heart") + '<span class="badge" hidden>0</span></a><div class="pop" id="pop-fav"></div></div>' +
       '<div class="hx"><a class="icon-btn" href="' + b + 'carrito/carrito.html" aria-label="Carrito de compras" data-badge="cart"' + cur("carrito") + ">" + CC.icon("cart") + '<span class="badge" hidden>0</span></a><div class="pop" id="pop-cart"></div></div>' +
       '<a class="btn btn--sm btn--reserve" href="' + b + 'reservas/reservas.html"' + cur("reservas") + ">" + CC.icon("calendar") + "<span>Reservar</span></a>" +
@@ -64,19 +65,74 @@
       '<span class="vine md-v1" data-vine="hang" data-len="210" data-flowers="1"></span><span class="vine md-v2" data-vine="hang" data-len="140"></span>' +
       '<span class="md-flies" data-flies="10"></span></div>' +
       '<div class="mdrawer__in">' +
+      '<div id="macct"></div>' +
       '<p class="mdrawer__k">Explora</p>' +
       '<ul class="mlinks">' + links + "</ul>" +
       '<div class="mdrawer__row">' +
       '<a class="mpill" href="' + b + 'favoritos/favoritos.html"' + cur("favoritos") + ">" + CC.icon("heart") + 'Favoritos<span class="mpill__n" data-mcount="fav">0</span></a>' +
-      '<a class="mpill" href="' + b + 'carrito/carrito.html"' + cur("carrito") + ">" + CC.icon("cart") + 'Carrito<span class="mpill__n" data-mcount="cart">0</span></a></div>' +
+      '<a class="mpill" href="' + b + 'carrito/carrito.html"' + cur("carrito") + ">" + CC.icon("cart") + 'Carrito<span class="mpill__n" data-mcount="cart">0</span></a>' +
+      '<a class="mpill" href="' + b + 'eventos/eventos.html"' + cur("eventos") + ">" + CC.icon("party") + "Eventos</a></div>" +
       '<a class="btn btn--block btn--cta" href="' + b + 'reservas/reservas.html"' + cur("reservas") + ">" + CC.icon("calendar") + "Reservar mesa</a>" +
       '<div class="mquick"><a href="' + wa + '" target="_blank" rel="noopener noreferrer">' + CC.icon("chat") + "WhatsApp" + NEW + '</a><a href="' + mapUrl + '" target="_blank" rel="noopener noreferrer">' + CC.icon("pin") + "Cómo llegar" + NEW + "</a></div>" +
       '<p class="mdrawer__addr">' + CC.icon("pin") + "<span>" + CC.esc(c.address) + "</span></p>" +
       '<div class="msoc">' + soc + "</div></div></div>" +
       '<div class="drawer-backdrop" id="drawer-backdrop"></div>';
-    wire(); navPill(); counters(); popovers(); scrollFx();
+    wire(); navPill(); counters(); popovers(); scrollFx(); account();
+    if (CC.auth) CC.auth.onChange(account);
     CC.store.onChange(function () { counters(); popovers(); });
   }
+
+  /* Cuenta: "Entrar con Google" o avatar con su menú (escritorio) y tarjeta en el menú móvil */
+  function initials(n) { return String(n || "?").trim().split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0); }).join("").toUpperCase(); }
+  function avatar(u, tag, extra) {
+    return "<" + tag + ' class="acct-av"' + (extra || "") + ">" + (u.photo ? '<img src="' + CC.esc(u.photo) + '" alt="" referrerpolicy="no-referrer">' : CC.esc(initials(u.name))) + "</" + tag + ">";
+  }
+  /* Avisos sin leer (se escuchan en vivo mientras haya sesión) */
+  var notesUid = null, notesOff = null, unread = 0;
+  function paintUnread() {
+    document.querySelectorAll("[data-unread]").forEach(function (el) { el.textContent = unread > 9 ? "9+" : unread; el.hidden = !unread; });
+    var a = document.querySelector("#acct .acct-av"); if (a) a.classList.toggle("has-unread", !!unread);
+  }
+  function watchNotes(u) {
+    var id = u ? u.uid : null;
+    if (id === notesUid) { paintUnread(); return; }
+    if (notesOff) { notesOff(); notesOff = null; }
+    notesUid = id; unread = 0; paintUnread();
+    if (!u || !CC.auth.fire) return;
+    CC.auth.fire().then(function (f) {
+      if (notesUid !== id) return;
+      notesOff = f.db.collection("notifications").where("uid", "==", id).where("read", "==", false)
+        .onSnapshot(function (q) { unread = q.size; paintUnread(); }, function () {});
+    }).catch(function () {});
+  }
+  function account() {
+    var host = document.getElementById("acct"), m = document.getElementById("macct"); if (!host || !m || !CC.auth) return;
+    var u = CC.auth.user(), b = CC.base;
+    setTimeout(function () { watchNotes(u); }, 0);
+    if (!u) {
+      host.innerHTML = '<button class="acct-in" type="button" data-login>' + '<span class="acct-in__g">' + (CC.googleIcon || "") + "</span><span>Entrar</span></button>";
+      m.innerHTML = '<div class="macct macct--out"><button class="acct-in" type="button" data-login><span class="acct-in__g">' + (CC.googleIcon || "") + "</span><span>Entrar con Google</span></button></div>";
+    } else {
+      host.innerHTML = avatar(u, "a", ' href="' + b + 'cuenta/cuenta.html" aria-label="Mi cuenta: ' + CC.esc(u.name) + '"').replace("</a>", '<span class="acct-av__dot" aria-hidden="true"></span></a>') +
+        '<div class="pop acct-pop"><div class="acct-pop__who">' + avatar(u, "span") + "<div><b>" + CC.esc(u.name) + "</b><small>" + CC.esc(u.email) + "</small></div></div>" +
+        '<p class="acct-sync">Favoritos y carrito sincronizados</p>' +
+        '<ul class="acct-pop__links"><li><a href="' + b + 'cuenta/cuenta.html">' + CC.icon("users") + "Mi cuenta</a></li>" +
+        '<li><a href="' + b + 'cuenta/cuenta.html#reservas">' + CC.icon("calendar") + "Mis reservaciones y eventos</a></li>" +
+        '<li><a href="' + b + 'cuenta/cuenta.html#avisos">' + CC.icon("bell") + 'Avisos<span class="acct-n" data-unread hidden></span></a></li>' +
+        '<li><a href="' + b + 'favoritos/favoritos.html">' + CC.icon("heart") + "Mis favoritos</a></li></ul>" +
+        '<button class="btn btn--outline btn--sm acct-pop__out" type="button" data-logout>' + CC.icon("arrow") + "Cerrar sesión</button></div>";
+      m.innerHTML = '<div class="macct">' + avatar(u, "span") + "<div><b>" + CC.esc(u.name) + "</b><small>" + CC.esc(u.email) + "</small></div>" +
+        '<a class="macct__btn" href="' + b + 'cuenta/cuenta.html">Mi cuenta<span class="acct-n" data-unread hidden></span></a></div>';
+    }
+  }
+  document.addEventListener("click", function (e) {
+    if (e.target.closest("[data-login]")) {
+      e.preventDefault();
+      var open = document.querySelector('.nav-toggle[aria-expanded="true"]'); if (open) open.click();   /* cierra el menú móvil primero */
+      if (CC.auth) CC.auth.openLogin();
+    }
+    else if (e.target.closest("[data-logout]")) { e.preventDefault(); if (CC.auth) CC.auth.signOut(); }
+  });
 
   /* Animación del contador sin depender de CSS */
   function bump(el, wiggle) {
@@ -125,7 +181,11 @@
     var h = document.getElementById("site-header-el"), bar = h.querySelector(".scroll-progress span"), last = window.scrollY, ticking = false;
     function update() {
       var y = window.scrollY, max = document.documentElement.scrollHeight - window.innerHeight;
-      h.classList.toggle("is-scrolled", y > 24);
+      /* Al encogerse, el encabezado sube la página ~56 px; con un solo umbral eso lo devolvía al otro estado y temblaba.
+         Dos umbrales separados más que ese salto (se encoge pasado 120 px y vuelve a crecer por debajo de 8 px) lo evitan. */
+      var small = h.classList.contains("is-scrolled");
+      if (!small && y > 120) h.classList.add("is-scrolled");
+      else if (small && y < 8) h.classList.remove("is-scrolled");
       bar.style.transform = "scaleX(" + (max > 0 ? Math.min(1, y / max) : 0) + ")";
       var open = document.getElementById("drawer").classList.contains("is-open");
       var popOpen = !!h.querySelector(".hx:hover"); // no ocultar mientras se ve el popover de favoritos/carrito

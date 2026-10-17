@@ -1,0 +1,39 @@
+/* ===== Eventos: el diseño común está en components/shared/booking.css ===== */
+.bh--ev { background: radial-gradient(ellipse 50% 70% at 88% 25%, rgba(235, 190, 139, .32), transparent 70%), radial-gradient(ellipse 45% 60% at 0% 100%, rgba(110, 154, 72, .26), transparent 70%), linear-gradient(160deg, #3a1a10, #1c0d06); }
+.evflow { position: relative; display: grid; gap: .9rem; margin: 0; padding: 0 0 0 1.4rem; list-style: none; }
+.evflow::before { content: ""; position: absolute; left: .35rem; top: .6rem; bottom: .6rem; width: 2px; background: linear-gradient(rgba(235, 190, 139, .2), rgba(235, 190, 139, .7)); }
+.evflow li { position: relative; }
+.evflow li::before { content: ""; position: absolute; left: -1.3rem; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(235, 190, 139, .2); }
+.evflow .st { font-size: .85rem; padding: .35rem .9rem; }
+
+.evtypes { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; margin-bottom: 1rem; }
+.evtype { display: flex; align-items: center; gap: .6rem; min-height: 56px; padding: .5rem .8rem; border-radius: 16px; border: 2px solid var(--line); background: #FFFBF5; color: var(--brown); font: 800 .9rem var(--font-body); text-align: left; cursor: pointer; transition: border-color .15s, transform .15s, background .15s; }
+.evtype:hover { border-color: var(--orange); transform: translateY(-2px); }
+.evtype__e { font-size: 1.4rem; line-height: 1; }
+.evtype[aria-checked="true"] { border-color: var(--brown); background: var(--brown); color: var(--gold); box-shadow: 0 8px 16px rgba(46, 23, 14, .22); }
+.evtitle { max-width: 460px; }
+
+.evwhen { display: grid; grid-template-columns: minmax(0, 460px) minmax(0, 1fr); gap: 1.4rem; align-items: start; }
+.evtimes { display: grid; gap: .9rem; }
+.evdur { margin: 0; color: var(--ink-soft); font-weight: 700; font-size: .9rem; }
+
+.party .evg { width: 4.2ch; min-height: 0; padding: 0; border: 0; background: transparent; font: 800 2.6rem/1 var(--font-title); color: var(--brown); text-align: center; -moz-appearance: textfield; }
+.party .evg::-webkit-inner-spin-button, .party .evg::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.party .evg:focus { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 8px; }
+
+.evspace { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: 1.1rem; }
+.evspace__o { position: relative; cursor: pointer; }
+.evspace__o input { position: absolute; opacity: 0; }
+.evspace__o span { display: grid; gap: .2rem; height: 100%; padding: .9rem 1rem; border-radius: 18px; border: 2px solid var(--line); background: #FFFBF5; transition: border-color .15s, background .15s; }
+.evspace__o b { color: var(--brown); }
+.evspace__o small { color: var(--ink-soft); font-weight: 600; line-height: 1.35; }
+.evspace__o input:checked + span { border-color: #6e9a48; background: #f3f9ec; box-shadow: inset 0 0 0 1px #6e9a48; }
+.evspace__o input:focus-visible + span { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+@media (max-width: 760px) {
+  .evflow { display: none; }
+  .evwhen { grid-template-columns: 1fr; }
+  .evtimes { grid-template-columns: 1fr 1fr; }
+  .evdur { grid-column: 1 / -1; }
+  .evspace { grid-template-columns: 1fr; }
+}

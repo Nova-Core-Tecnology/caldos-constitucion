@@ -16,11 +16,10 @@
       if (m && m.name && !seen[m.name] && names.length < 16) { seen[m.name] = 1; names.push(m.name); }
     });
     if (names.length < 4) names = ["Sancocho de siete carnes", "Caldo de pata", "Mofongo", "Mariscos", "Antojos dominicanos", "Para compartir"];
-    var leaves = ["cil0", "ore1", "bas1", "par0"];
     function grp() {
       return '<div class="plus-band__grp">' + names.map(function (n, i) {
         return '<span class="plus-band__it">' + esc(n) +
-          '<svg viewBox="-14 -26 28 30" aria-hidden="true" focusable="false"><use href="#' + leaves[i % leaves.length] + '" class="g5" transform="rotate(' + ((i * 37) % 60 - 30) + ') scale(24)"/></svg></span>';
+          '<svg aria-hidden="true" focusable="false" style="rotate:' + ((i * 37) % 60 - 30) + 'deg"><use href="#v-leaf"/></svg></span>';
       }).join("") + "</div>";
     }
     var el = document.createElement("div");
@@ -35,14 +34,14 @@
     var hero = $("#hero"); if (!hero || reduce || $(".plus-leaves")) return;
     var box = document.createElement("div");
     box.className = "plus-leaves"; box.setAttribute("aria-hidden", "true");
-    var shapes = ["cil0", "cil1", "ore0", "bas0", "men1", "par1", "lau0", "cil3"], cols = ["g4", "g5", "g6", "g3"];
+    var cols = ["g4", "g5", "g6", "g3"];
     for (var i = 0; i < 9; i++) {
       var w = 22 + Math.round(Math.random() * 28);
       var d = document.createElement("div");
       d.className = "plus-leaf";
       d.style.cssText = "left:" + (4 + i * 10.5 + Math.random() * 6).toFixed(1) + "%;--w:" + w + "px;--t:" + (20 + Math.random() * 16).toFixed(1) + "s;--dl:-" + (Math.random() * 30).toFixed(1) +
         "s;--dx:" + (Math.round(Math.random() * 120) - 40) + "px;--r0:" + (Math.round(Math.random() * 90) - 45) + "deg";
-      d.innerHTML = '<svg viewBox="-1.2 -1.3 2.4 1.6" aria-hidden="true"><use href="#' + shapes[i % shapes.length] + '" class="' + cols[i % cols.length] + '" transform="translate(0 0) rotate(' + (i * 41 % 90 - 45) + ')"/></svg>';
+      d.innerHTML = '<svg class="' + cols[i % cols.length] + '" aria-hidden="true" focusable="false" style="rotate:' + (i * 41 % 90 - 45) + 'deg"><use href="#v-leaf"/></svg>';
       box.appendChild(d);
     }
     hero.appendChild(box);
@@ -109,7 +108,7 @@
         var r = host.getBoundingClientRect();
         if (r.bottom < -100 || r.top > vh + 100) return;
         var p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
-        var svg = d.firstElementChild; if (svg) svg.style.transform = "translate3d(0," + (p * 26).toFixed(1) + "px,0)";
+        var img = d.firstElementChild; if (img) img.style.translate = "0 " + Math.round(p * 26) + "px";
       });
       ticking = false;
     }
